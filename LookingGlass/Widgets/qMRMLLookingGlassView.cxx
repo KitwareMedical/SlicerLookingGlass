@@ -76,8 +76,6 @@
 // VTK includes
 #include <vtkCollection.h>
 #include <vtkCullerCollection.h>
-#include <vtkLight.h>
-#include <vtkLightCollection.h>
 #include <vtkNew.h>
 #include <vtkOpenGLFramebufferObject.h>
 #include <vtkPolyDataMapper.h>
@@ -237,39 +235,6 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
 //  this->Renderer->RemoveCuller(this->Renderer->GetCullers()->GetLastItem());
 //  this->Renderer->SetBackground(0.7, 0.7, 0.7);
 
-//  // Create 4 lights for even lighting
-//  // without this, one side of models may be very dark.
-//  this->Lights = vtkSmartPointer<vtkLightCollection>::New();
-//  {
-//    vtkNew<vtkLight> light;
-//    light->SetPosition(0.0, 1.0, 0.0);
-//    light->SetIntensity(1.0);
-//    light->SetLightTypeToSceneLight();
-//    this->Lights->AddItem(light);
-//  }
-//  {
-//    vtkNew<vtkLight> light;
-//    light->SetPosition(0.8, -0.2, 0.0);
-//    light->SetIntensity(0.8);
-//    light->SetLightTypeToSceneLight();
-//    this->Lights->AddItem(light);
-//  }
-//  {
-//    vtkNew<vtkLight> light;
-//    light->SetPosition(-0.3, -0.2, 0.7);
-//    light->SetIntensity(0.6);
-//    light->SetLightTypeToSceneLight();
-//    this->Lights->AddItem(light);
-//  }
-//  {
-//    vtkNew<vtkLight> light;
-//    light->SetPosition(-0.3, -0.2, -0.7);
-//    light->SetIntensity(0.4);
-//    light->SetLightTypeToSceneLight();
-//    this->Lights->AddItem(light);
-//  }
-//  this->Renderer->SetLightCollection(this->Lights);
-
   q->updateViewFromReferenceViewCamera();
 
   this->RenderWindow->Initialize();
@@ -296,7 +261,6 @@ void qMRMLLookingGlassViewPrivate::destroyRenderWindow()
   this->DisplayableManagerGroup = nullptr;
   this->Renderer = nullptr;
   this->Camera = nullptr;
-  this->Lights = nullptr;
   this->RenderWindow = nullptr;
 }
 
@@ -341,13 +305,6 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
   this->Renderer->SetBackground2(this->MRMLLookingGlassViewNode->GetBackgroundColor2());
 
   this->Renderer->SetTwoSidedLighting(this->MRMLLookingGlassViewNode->GetTwoSidedLighting());
-
-  bool switchOnAllLights = this->MRMLLookingGlassViewNode->GetBackLights();
-  for (int i = 2; i < this->Lights->GetNumberOfItems(); i++)
-  {
-    vtkLight* light = vtkLight::SafeDownCast(this->Lights->GetItemAsObject(i));
-    light->SetSwitch(switchOnAllLights);
-  }
 
   this->Renderer->SetUseDepthPeeling(this->MRMLLookingGlassViewNode->GetUseDepthPeeling() != 0);
   this->Renderer->SetUseDepthPeelingForVolumes(this->MRMLLookingGlassViewNode->GetUseDepthPeeling() != 0);

@@ -78,11 +78,6 @@ public:
   vtkSetMacro(TwoSidedLighting, bool);
   vtkBooleanMacro(TwoSidedLighting, bool);
 
-  /// If enabled then 4 lights are used, otherwise just 2.
-  vtkGetMacro(BackLights, bool);
-  vtkSetMacro(BackLights, bool);
-  vtkBooleanMacro(BackLights, bool);
-
   /// Desired frame rate. Volume renderer may use this information
   /// for determining sampling distances (and other LOD actors, to
   /// determine display quality).
@@ -121,7 +116,6 @@ public:
 
 protected:
   bool TwoSidedLighting;
-  bool BackLights;
   double DesiredUpdateRate;
   double Magnification;
   double MotionSpeed;

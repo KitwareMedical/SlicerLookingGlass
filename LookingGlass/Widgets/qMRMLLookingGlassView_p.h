@@ -47,7 +47,6 @@
 #include <QTimer>
 
 class QLabel;
-class vtkLightCollection;
 class vtkMRMLCameraNode;
 class vtkMRMLDisplayableManagerGroup;
 class vtkMRMLTransformNode;
@@ -103,7 +102,6 @@ protected:
 //  vtkSmartPointer<vtkLookingGlassViewInteractorStyle> InteractorStyle;
   //vtkSmartPointer<vtkOpenVRInteractorStyle> InteractorStyle; //TODO: For debugging the original interactor
   vtkSmartPointer<vtkCamera> Camera;
-  vtkSmartPointer<vtkLightCollection> Lights;
 
   vtkSmartPointer<vtkTimerLog> LastViewUpdateTime;
   double LastViewDirection[3];

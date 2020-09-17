@@ -31,7 +31,6 @@ vtkMRMLNodeNewMacro(vtkMRMLLookingGlassViewNode);
 //----------------------------------------------------------------------------
 vtkMRMLLookingGlassViewNode::vtkMRMLLookingGlassViewNode()
   : TwoSidedLighting(false)
-  , BackLights(true)
   , DesiredUpdateRate(60.0)
   , Magnification(10.0)
   , MotionSpeed(1.6666)
@@ -64,7 +63,6 @@ void vtkMRMLLookingGlassViewNode::WriteXML(ostream& of, int nIndent)
 
   vtkMRMLWriteXMLBeginMacro(of);
   vtkMRMLWriteXMLBooleanMacro(twoSidedLighting, TwoSidedLighting);
-  vtkMRMLWriteXMLBooleanMacro(backLights, BackLights);
   vtkMRMLWriteXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
   vtkMRMLWriteXMLFloatMacro(magnification, Magnification);
   vtkMRMLWriteXMLFloatMacro(motionSpeed, MotionSpeed);
@@ -81,7 +79,6 @@ void vtkMRMLLookingGlassViewNode::ReadXMLAttributes(const char** atts)
 
   vtkMRMLReadXMLBeginMacro(atts);
   vtkMRMLReadXMLBooleanMacro(twoSidedLighting, TwoSidedLighting);
-  vtkMRMLReadXMLBooleanMacro(backLights, BackLights);
   vtkMRMLReadXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
   vtkMRMLReadXMLFloatMacro(magnification, Magnification);
   vtkMRMLReadXMLFloatMacro(motionSpeed, MotionSpeed);
@@ -102,7 +99,6 @@ void vtkMRMLLookingGlassViewNode::Copy(vtkMRMLNode* anode)
 
   vtkMRMLCopyBeginMacro(anode);
   vtkMRMLCopyBooleanMacro(TwoSidedLighting);
-  vtkMRMLCopyBooleanMacro(BackLights);
   vtkMRMLCopyFloatMacro(DesiredUpdateRate);
   vtkMRMLCopyFloatMacro(Magnification);
   vtkMRMLCopyFloatMacro(MotionSpeed);
@@ -119,7 +115,6 @@ void vtkMRMLLookingGlassViewNode::PrintSelf(ostream& os, vtkIndent indent)
 
   vtkMRMLPrintBeginMacro(os, indent);
   vtkMRMLPrintBooleanMacro(TwoSidedLighting);
-  vtkMRMLPrintBooleanMacro(BackLights);
   vtkMRMLPrintFloatMacro(DesiredUpdateRate);
   vtkMRMLPrintFloatMacro(Magnification);
   vtkMRMLPrintFloatMacro(MotionSpeed);

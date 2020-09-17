@@ -73,32 +73,11 @@ public:
   /// \sa GetReferenceViewNode
   bool SetAndObserveReferenceViewNode(vtkMRMLViewNode* node);
 
-  /// Controls two-sided lighting property of the renderer
-  vtkGetMacro(TwoSidedLighting, bool);
-  vtkSetMacro(TwoSidedLighting, bool);
-  vtkBooleanMacro(TwoSidedLighting, bool);
-
   /// Desired frame rate. Volume renderer may use this information
   /// for determining sampling distances (and other LOD actors, to
   /// determine display quality).
   vtkGetMacro(DesiredUpdateRate, double);
   vtkSetMacro(DesiredUpdateRate, double);
-
-  /// Magnification of world [0.01, 100].
-  /// Translated to physical scale of the VR render window
-  vtkGetMacro(Magnification, double);
-  vtkSetMacro(Magnification, double);
-
-  /// Motion speed of fly (i.e. dolly) in meters per second.
-  /// Default is walking speed: 6 km/h = 1.66 m/s
-  vtkGetMacro(MotionSpeed, double);
-  vtkSetMacro(MotionSpeed, double);
-
-  /// Motion sensitivity (between 0.0 and 1.0).
-  /// If virtual reality headset is not moving then update rate
-  /// is decreased to allow higher quality rendering.
-  vtkGetMacro(MotionSensitivity, double);
-  vtkSetMacro(MotionSensitivity, double);
 
   /// Return true if an error has occurred.
   /// "Connected" member requests connection but this method can tell if the
@@ -115,11 +94,7 @@ public:
   std::string GetError() const;
 
 protected:
-  bool TwoSidedLighting;
   double DesiredUpdateRate;
-  double Magnification;
-  double MotionSpeed;
-  double MotionSensitivity;
 
   std::string LastErrorMessage;
 

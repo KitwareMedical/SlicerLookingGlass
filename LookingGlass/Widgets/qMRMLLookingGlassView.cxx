@@ -154,12 +154,6 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
   this->RenderWindow->AddRenderer(this->Renderer);
   this->RenderWindow->SetInteractor(this->Interactor);
 
-//  // Set default 10x magnification (conversion: PhysicalScale = 1000 / Magnification)
-//  this->RenderWindow->SetPhysicalScale(100.0);
-//  // Observe VR render window event
-//  qvtkReconnect(this->RenderWindow, vtkOpenVRRenderWindow::PhysicalToWorldMatrixModified,
-//                q, SLOT(onPhysicalToWorldMatrixModified()));
-
   vtkMRMLLookingGlassViewDisplayableManagerFactory* factory
     = vtkMRMLLookingGlassViewDisplayableManagerFactory::GetInstance();
 
@@ -258,9 +252,6 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
   this->Renderer->SetGradientBackground(1);
   this->Renderer->SetBackground(this->MRMLLookingGlassViewNode->GetBackgroundColor());
   this->Renderer->SetBackground2(this->MRMLLookingGlassViewNode->GetBackgroundColor2());
-
-  this->Renderer->SetTwoSidedLighting(this->MRMLLookingGlassViewNode->GetTwoSidedLighting());
-
   this->Renderer->SetUseDepthPeeling(this->MRMLLookingGlassViewNode->GetUseDepthPeeling() != 0);
   this->Renderer->SetUseDepthPeelingForVolumes(this->MRMLLookingGlassViewNode->GetUseDepthPeeling() != 0);
 
@@ -269,52 +260,6 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
   {
     // Desired update rate
     this->RenderWindow->SetDesiredUpdateRate(this->desiredUpdateRate());
-
-//    // Magnification
-//    double magnification = this->MRMLLookingGlassViewNode->GetMagnification();
-//    if (magnification < 0.01)
-//    {
-//      magnification = 0.01;
-//    }
-//    else if (magnification > 100.0)
-//    {
-//      magnification = 100.0;
-//    }
-//    this->InteractorStyle->SetMagnification(magnification);
-
-//    // Dolly physical speed
-//    double dollyPhysicalSpeedMps = this ->MRMLLookingGlassViewNode->GetMotionSpeed();
-
-//    // 1.6666 m/s is walking speed (= 6 km/h), which is the default. We multiply it with the factor
-//    this->InteractorStyle->SetDollyPhysicalSpeed(dollyPhysicalSpeedMps);
-
-//    if (this->RenderWindow->GetHMD())
-//    {
-//      vtkEventDataDevice deviceIdsToUpdate[] = { vtkEventDataDevice::RightController, vtkEventDataDevice::LeftController, vtkEventDataDevice::Unknown };
-//      for (int deviceIdIndex = 0; deviceIdsToUpdate[deviceIdIndex] != vtkEventDataDevice::Unknown; deviceIdIndex++)
-//      {
-//        vtkOpenVRModel* model = this->RenderWindow->GetTrackedDeviceModel(deviceIdsToUpdate[deviceIdIndex]);
-//        if (!model)
-//        {
-//          continue;
-//        }
-//        model->SetVisibility(this->MRMLLookingGlassViewNode->GetControllerModelsVisible());
-//      }
-
-//      // Update tracking reference visibility
-//      for (uint32_t deviceIdIndex = 0; deviceIdIndex < vr::k_unMaxTrackedDeviceCount; ++deviceIdIndex)
-//      {
-//        if (this->RenderWindow->GetHMD()->GetTrackedDeviceClass(deviceIdIndex) == vr::TrackedDeviceClass_TrackingReference)
-//        {
-//          vtkOpenVRModel* model = this->RenderWindow->GetTrackedDeviceModel(deviceIdIndex);
-//          if (!model)
-//          {
-//            continue;
-//          }
-//          model->SetVisibility(this->MRMLLookingGlassViewNode->GetLighthouseModelsVisible());
-//        }
-//      }
-//    }
   }
 
 //  if (this->MRMLLookingGlassViewNode->GetActive())

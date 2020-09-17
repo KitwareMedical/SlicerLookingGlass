@@ -30,11 +30,7 @@ vtkMRMLNodeNewMacro(vtkMRMLLookingGlassViewNode);
 
 //----------------------------------------------------------------------------
 vtkMRMLLookingGlassViewNode::vtkMRMLLookingGlassViewNode()
-  : TwoSidedLighting(false)
-  , DesiredUpdateRate(60.0)
-  , Magnification(10.0)
-  , MotionSpeed(1.6666)
-  , MotionSensitivity(0.5)
+  : DesiredUpdateRate(60.0)
 {
   this->Visibility = 0; // hidden by default to not connect to the headset until it is needed
   this->BackgroundColor[0] = this->defaultBackgroundColor()[0];
@@ -62,11 +58,7 @@ void vtkMRMLLookingGlassViewNode::WriteXML(ostream& of, int nIndent)
   this->Superclass::WriteXML(of, nIndent);
 
   vtkMRMLWriteXMLBeginMacro(of);
-  vtkMRMLWriteXMLBooleanMacro(twoSidedLighting, TwoSidedLighting);
   vtkMRMLWriteXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
-  vtkMRMLWriteXMLFloatMacro(magnification, Magnification);
-  vtkMRMLWriteXMLFloatMacro(motionSpeed, MotionSpeed);
-  vtkMRMLWriteXMLFloatMacro(motionSensitivity, MotionSensitivity);
   vtkMRMLWriteXMLEndMacro();
 }
 
@@ -78,11 +70,7 @@ void vtkMRMLLookingGlassViewNode::ReadXMLAttributes(const char** atts)
   this->Superclass::ReadXMLAttributes(atts);
 
   vtkMRMLReadXMLBeginMacro(atts);
-  vtkMRMLReadXMLBooleanMacro(twoSidedLighting, TwoSidedLighting);
   vtkMRMLReadXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
-  vtkMRMLReadXMLFloatMacro(magnification, Magnification);
-  vtkMRMLReadXMLFloatMacro(motionSpeed, MotionSpeed);
-  vtkMRMLReadXMLFloatMacro(motionSensitivity, MotionSensitivity);
   vtkMRMLReadXMLEndMacro();
 
   this->EndModify(disabledModify);
@@ -98,11 +86,7 @@ void vtkMRMLLookingGlassViewNode::Copy(vtkMRMLNode* anode)
   this->Superclass::Copy(anode);
 
   vtkMRMLCopyBeginMacro(anode);
-  vtkMRMLCopyBooleanMacro(TwoSidedLighting);
   vtkMRMLCopyFloatMacro(DesiredUpdateRate);
-  vtkMRMLCopyFloatMacro(Magnification);
-  vtkMRMLCopyFloatMacro(MotionSpeed);
-  vtkMRMLCopyFloatMacro(MotionSensitivity);
   vtkMRMLCopyEndMacro();
 
   this->EndModify(disabledModify);
@@ -114,11 +98,7 @@ void vtkMRMLLookingGlassViewNode::PrintSelf(ostream& os, vtkIndent indent)
   this->Superclass::PrintSelf(os, indent);
 
   vtkMRMLPrintBeginMacro(os, indent);
-  vtkMRMLPrintBooleanMacro(TwoSidedLighting);
   vtkMRMLPrintFloatMacro(DesiredUpdateRate);
-  vtkMRMLPrintFloatMacro(Magnification);
-  vtkMRMLPrintFloatMacro(MotionSpeed);
-  vtkMRMLPrintFloatMacro(MotionSensitivity);
   vtkMRMLPrintEndMacro();
 }
 

@@ -58,10 +58,6 @@ class vtkTimerLog;
 class vtkLookingGlassViewInteractor;
 class vtkLookingGlassViewInteractorStyle;
 
-namespace vr
-{
-  struct TrackedDevicePose_t;
-}
 
 //-----------------------------------------------------------------------------
 class qMRMLLookingGlassViewPrivate: public QObject

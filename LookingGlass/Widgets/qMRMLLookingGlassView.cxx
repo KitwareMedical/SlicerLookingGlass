@@ -84,28 +84,6 @@
 #include <vtkSmartPointer.h>
 #include <vtkTimerLog.h>
 
-//namespace
-//{
-//  //--------------------------------------------------------------------------
-//  std::string PoseStatusToString(vr::ETrackingResult result)
-//  {
-//    switch (result)
-//    {
-//      case vr::TrackingResult_Calibrating_InProgress:
-//        return "CalibratingInProgress";
-//      case vr::TrackingResult_Calibrating_OutOfRange:
-//        return "CalibratingOutOfRange";
-//      case vr::TrackingResult_Running_OK:
-//        return "RunningOk";
-//      case vr::TrackingResult_Running_OutOfRange:
-//        return "RunningOutOfRange";
-//      case vr::TrackingResult_Uninitialized:
-//      default:
-//        return "Uninitialized";
-//    }
-//  }
-//}
-
 //--------------------------------------------------------------------------
 // qMRMLLookingGlassViewPrivate methods
 
@@ -146,8 +124,6 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
 {
   Q_Q(qMRMLLookingGlassView);
 
-  qDebug() << "createRenderWindow";
-
   this->LastViewUpdateTime = vtkSmartPointer<vtkTimerLog>::New();
   this->LastViewUpdateTime->StartTimer();
   this->LastViewUpdateTime->StopTimer();
@@ -161,16 +137,11 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
   this->LastViewPosition[1] = 0.0;
   this->LastViewPosition[2] = 0.0;
 
-  qDebug() <<  __LINE__;
   this->RenderWindow = vtkSmartPointer<vtkOpenGLRenderWindow>::Take(
         vtkLookingGlassInterface::CreateLookingGlassRenderWindow());
-//  this->RenderWindow = vtkSmartPointer<vtkOpenVRRenderWindow>::New();
 
-  qDebug() <<  __LINE__;
   this->Renderer = vtkSmartPointer<vtkRenderer>::New();
-//  this->Renderer = vtkSmartPointer<vtkOpenVRRenderer>::New();
 
-  qDebug() <<  __LINE__;
   this->Interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
 //  this->InteractorStyle = vtkSmartPointer<vtkLookingGlassViewInteractorStyle>::New();
 //  //this->InteractorStyle = vtkSmartPointer<vtkOpenVRInteractorStyle>::New(); //TODO: For debugging the original interactor
@@ -179,15 +150,10 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
 //  this->InteractorStyle->SetCurrentRenderer(this->Renderer);
   this->Camera = vtkSmartPointer<vtkCamera>::New();
   this->Renderer->SetActiveCamera(this->Camera);
-
-  qDebug() <<  __LINE__;
-
   this->RenderWindow->SetMultiSamples(0);
-  qDebug() <<  __LINE__;
   this->RenderWindow->AddRenderer(this->Renderer);
-  qDebug() <<  __LINE__;
   this->RenderWindow->SetInteractor(this->Interactor);
-  qDebug() <<  __LINE__;
+
 //  // Set default 10x magnification (conversion: PhysicalScale = 1000 / Magnification)
 //  this->RenderWindow->SetPhysicalScale(100.0);
 //  // Observe VR render window event
@@ -212,23 +178,18 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
       << "vtkMRMLLinearTransformsDisplayableManager3D"
       << "vtkMRMLVolumeRenderingDisplayableManager"
       ;
-  qDebug() <<  __LINE__;
+
   foreach (const QString& displayableManager, displayableManagers)
   {
-    qDebug() <<  __LINE__ << displayableManager;
     if (!factory->IsDisplayableManagerRegistered(displayableManager.toLatin1()))
     {
       factory->RegisterDisplayableManager(displayableManager.toLatin1());
     }
   }
 
-  qDebug() <<  __LINE__;
   this->DisplayableManagerGroup = vtkSmartPointer<vtkMRMLDisplayableManagerGroup>::Take(
                                     factory->InstantiateDisplayableManagers(q->renderer()));
   this->DisplayableManagerGroup->SetMRMLDisplayableNode(this->MRMLLookingGlassViewNode);
-//  this->InteractorStyle->SetDisplayableManagerGroup(this->DisplayableManagerGroup);
-
-  qDebug() << "this->DisplayableManagerGroup" << this->DisplayableManagerGroup->GetDisplayableManagerCount();
 
 //  ///CONFIGURATION OF THE OPENVR ENVIRONEMENT
 
@@ -239,12 +200,6 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
 
   this->RenderWindow->Initialize();
   this->Renderer->ResetCamera();
-//  this->Renderer->GetActiveCamera();
-//  if (!this->RenderWindow->GetHMD())
-//  {
-//    qWarning() << "Failed to initialize OpenVR RenderWindow";
-//    return;
-//  }
 }
 
 //---------------------------------------------------------------------------

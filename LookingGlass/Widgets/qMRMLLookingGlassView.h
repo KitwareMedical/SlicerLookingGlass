@@ -109,6 +109,8 @@ public slots:
 
 //  void onPhysicalToWorldMatrixModified();
 
+  void scheduleRender();
+
 protected:
 
   QScopedPointer<qMRMLLookingGlassViewPrivate> d_ptr;

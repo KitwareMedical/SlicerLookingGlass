@@ -55,6 +55,7 @@ protected:
   qSlicerLookingGlassModule* const q_ptr;
 public:
   qSlicerLookingGlassModulePrivate(qSlicerLookingGlassModule& object);
+  virtual ~qSlicerLookingGlassModulePrivate();
 
   vtkSlicerLookingGlassLogic* logic();
 
@@ -235,6 +236,15 @@ qSlicerLookingGlassModulePrivate::qSlicerLookingGlassModulePrivate(qSlicerLookin
   , LookingGlassViewWidget(nullptr)
   , Spacer(nullptr)
 {
+}
+
+//-----------------------------------------------------------------------------
+qSlicerLookingGlassModulePrivate::~qSlicerLookingGlassModulePrivate()
+{
+  if (this->LookingGlassViewWidget != nullptr)
+    {
+    delete this->LookingGlassViewWidget;
+    }
 }
 
 //-----------------------------------------------------------------------------

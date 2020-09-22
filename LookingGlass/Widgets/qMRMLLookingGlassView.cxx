@@ -18,18 +18,6 @@
 
 ==============================================================================*/
 
-// Need to be included before qMRMLLookingGlassView_p.h
-#include <vtkCamera.h>
-//#include <vtkLookingGlassViewInteractorStyle.h>
-//#include <vtkOpenVRInteractorStyle.h> //TODO: For debugging the original interactor
-//#include <vtkLookingGlassViewInteractor.h>
-//#include <vtkOpenVRRenderWindowInteractor.h> //TODO: For debugging the original interactor
-//#include <vtkOpenVRModel.h>
-#include <vtkOpenGLRenderWindow.h>
-//#include <vtkOpenVRRenderer.h>
-
-#include <vtkLookingGlassInterface.h>
-
 #include "qMRMLLookingGlassView_p.h"
 
 // Qt includes
@@ -59,7 +47,7 @@
 #include "vtkSlicerCamerasModuleLogic.h"
 #include <vtkSlicerVersionConfigure.h> // For Slicer_VERSION_MAJOR, Slicer_VERSION_MINOR 
 
-// LookingGlass includes
+// Slicer LookingGlass includes
 #include "vtkMRMLLookingGlassViewNode.h"
 
 // MRMLDisplayableManager includes
@@ -73,11 +61,16 @@
 #include <vtkMRMLLinearTransformNode.h>
 #include <vtkMRMLScene.h>
 
+// VTK LookingGlass includes
+#include <vtkLookingGlassInterface.h>
+
 // VTK includes
+#include <vtkCamera.h>
 #include <vtkCollection.h>
 #include <vtkCullerCollection.h>
 #include <vtkNew.h>
 #include <vtkOpenGLFramebufferObject.h>
+#include <vtkOpenGLRenderWindow.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderer.h>
 #include <vtkRendererCollection.h>
@@ -141,10 +134,8 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
         vtkLookingGlassInterface::CreateLookingGlassRenderWindow());
 
   this->Renderer = vtkSmartPointer<vtkRenderer>::New();
-
   this->Interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
-//  this->InteractorStyle = vtkSmartPointer<vtkLookingGlassViewInteractorStyle>::New();
-//  //this->InteractorStyle = vtkSmartPointer<vtkOpenVRInteractorStyle>::New(); //TODO: For debugging the original interactor
+  this->InteractorStyle = vtkSmartPointer<vtkMRMLThreeDViewInteractorStyle>::New();
 //  this->Interactor->SetInteractorStyle(this->InteractorStyle);
 //  this->InteractorStyle->SetInteractor(this->Interactor);
 //  this->InteractorStyle->SetCurrentRenderer(this->Renderer);
@@ -158,14 +149,15 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
     = vtkMRMLLookingGlassViewDisplayableManagerFactory::GetInstance();
 
   QStringList displayableManagers;
-  displayableManagers //<< "vtkMRMLCameraDisplayableManager"
+  displayableManagers
+      << "vtkMRMLCameraDisplayableManager"
   //<< "vtkMRMLViewDisplayableManager"
       << "vtkMRMLModelDisplayableManager"
       << "vtkMRMLThreeDReformatDisplayableManager"
       << "vtkMRMLCrosshairDisplayableManager3D"
-      //<< "vtkMRMLOrientationMarkerDisplayableManager" // Not supported in VR
-      //<< "vtkMRMLRulerDisplayableManager" // Not supported in VR
-      //<< "vtkMRMLAnnotationDisplayableManager" // Not supported in VR
+      << "vtkMRMLOrientationMarkerDisplayableManager"
+      //<< "vtkMRMLRulerDisplayableManager" // Not supported in LookingGlass ?
+      //<< "vtkMRMLAnnotationDisplayableManager" // Not supported in LookingGlass ?
       << "vtkMRMLMarkupsDisplayableManager"
       << "vtkMRMLSegmentationsDisplayableManager3D"
       << "vtkMRMLTransformsDisplayableManager3D"
@@ -194,6 +186,10 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
 
   this->RenderWindow->Initialize();
   this->Renderer->ResetCamera();
+
+  // Observe displayable manager group to catch RequestRender events
+  this->qvtkConnect(this->DisplayableManagerGroup, vtkCommand::UpdateEvent,
+    q, SLOT(scheduleRender()));
 }
 
 //---------------------------------------------------------------------------
@@ -204,13 +200,13 @@ void qMRMLLookingGlassViewPrivate::destroyRenderWindow()
   // Must break the connection between interactor and render window,
   // otherwise they would circularly refer to each other and would not
   // be deleted.
-  this->Interactor->SetRenderWindow(nullptr);
-  this->Interactor = nullptr;
+//  this->Interactor->SetRenderWindow(nullptr);
+//  this->Interactor = nullptr;
 //  this->InteractorStyle = nullptr;
-  this->DisplayableManagerGroup = nullptr;
-  this->Renderer = nullptr;
-  this->Camera = nullptr;
-  this->RenderWindow = nullptr;
+//  this->DisplayableManagerGroup = nullptr;
+//  this->Renderer = nullptr;
+//  this->Camera = nullptr;
+//  this->RenderWindow = nullptr;
 }
 
 // --------------------------------------------------------------------------
@@ -401,6 +397,13 @@ void qMRMLLookingGlassView::setMRMLLookingGlassViewNode(vtkMRMLLookingGlassViewN
 
   // Enable/disable widget
   this->setEnabled(newViewNode != nullptr);
+}
+
+//---------------------------------------------------------------------------
+void qMRMLLookingGlassView::scheduleRender()
+{
+  Q_D(qMRMLLookingGlassView);
+  d->RenderWindow->Render();
 }
 
 //---------------------------------------------------------------------------

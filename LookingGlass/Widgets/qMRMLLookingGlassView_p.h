@@ -57,6 +57,7 @@ class vtkObject;
 class vtkTimerLog;
 class vtkLookingGlassViewInteractor;
 class vtkLookingGlassViewInteractorStyle;
+class vtkMRMLThreeDViewInteractorStyle;
 
 
 //-----------------------------------------------------------------------------
@@ -94,6 +95,7 @@ protected:
   vtkSmartPointer<vtkRenderer> Renderer;
   vtkSmartPointer<vtkOpenGLRenderWindow> RenderWindow;
   vtkSmartPointer<vtkRenderWindowInteractor> Interactor;
+  vtkSmartPointer<vtkMRMLThreeDViewInteractorStyle> InteractorStyle;
   //vtkSmartPointer<vtkOpenVRRenderWindowInteractor> Interactor; //TODO: For debugging the original interactor
 //  vtkSmartPointer<vtkLookingGlassViewInteractorStyle> InteractorStyle;
   //vtkSmartPointer<vtkOpenVRInteractorStyle> InteractorStyle; //TODO: For debugging the original interactor

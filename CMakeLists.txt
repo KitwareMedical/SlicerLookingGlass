@@ -15,15 +15,6 @@ set(EXTENSION_BUILD_SUBDIRECTORY inner-build)
 
 set(SUPERBUILD_TOPLEVEL_PROJECT inner)
 
-# HACK: Added to vtk-config.cmake
-#set(HoloPlayCore_INCLUDE_DIR "/home/jcfr/Support/HoloPlayCoreSDK-0.1.1/HoloPlayCore/include")
-#set(HoloPlayCore_LIBRARY "/home/jcfr/Support/HoloPlayCoreSDK-0.1.1/HoloPlayCore/dylib/linux/libHoloPlayCore.so")
-#set(CMAKE_MODULE_PATH
-#  "/home/jcfr/Projects/Slicer-Release/VTK/Rendering/LookingGlass"
-#  ${CMAKE_MODULE_PATH}
-#  )
-
-
 #-----------------------------------------------------------------------------
 # Extension dependencies
 find_package(Slicer REQUIRED)
@@ -33,12 +24,11 @@ mark_as_superbuild(Slicer_DIR)
 find_package(Git REQUIRED)
 mark_as_superbuild(GIT_EXECUTABLE)
 
-find_package(VTK
-  COMPONENTS
-    ${Slicer_VTK_COMPONENTS}
-    RenderingLookingGlass
-  REQUIRED
-  )
+#-----------------------------------------------------------------------------
+# Sanity checks
+if(NOT Slicer_VTK_VERSION_MAJOR STREQUAL "9")
+  message(FATAL_ERROR "Slicer_VTK_VERSION_MAJOR is expected to be '9'. Current value is '${Slicer_VTK_VERSION_MAJOR}'")
+endif()
 
 #-----------------------------------------------------------------------------
 # SuperBuild setup
@@ -56,7 +46,10 @@ add_subdirectory(LookingGlass)
 
 #-----------------------------------------------------------------------------
 set(EXTENSION_CPACK_INSTALL_CMAKE_PROJECTS)
-#list(APPEND EXTENSION_CPACK_INSTALL_CMAKE_PROJECTS "${Foo_DIR};Foo;RuntimeLibraries;/")
+list(APPEND EXTENSION_CPACK_INSTALL_CMAKE_PROJECTS "${vtkRenderingLookingGlass_DIR};vtkRenderingLookingGlass;runtime;/")
+if(Slicer_USE_PYTHONQT)
+  list(APPEND EXTENSION_CPACK_INSTALL_CMAKE_PROJECTS "${vtkRenderingLookingGlass_DIR};vtkRenderingLookingGlass;python;/")
+endif()
 set(${EXTENSION_NAME}_CPACK_INSTALL_CMAKE_PROJECTS "${EXTENSION_CPACK_INSTALL_CMAKE_PROJECTS}" CACHE STRING "List of external projects to install" FORCE)
 
 #-----------------------------------------------------------------------------

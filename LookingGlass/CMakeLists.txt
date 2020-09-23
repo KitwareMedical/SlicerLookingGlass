@@ -6,6 +6,9 @@ set(MODULE_TITLE ${MODULE_NAME})
 string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 
 #-----------------------------------------------------------------------------
+find_package(vtkRenderingLookingGlass REQUIRED)
+
+#-----------------------------------------------------------------------------
 add_subdirectory(MRML)
 add_subdirectory(Logic)
 add_subdirectory(Widgets)

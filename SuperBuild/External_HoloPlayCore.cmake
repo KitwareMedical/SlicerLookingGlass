@@ -58,7 +58,24 @@ if((NOT DEFINED ${proj}_INCLUDE_DIR
     set(_prefix "")
     set(_ext "lib")
   endif()
-  set(${proj}_LIBRARY "${EP_BINARY_DIR}/HoloPlayCore/dylib/${_dir}/${_prefix}HoloPlayCore.${_ext}")
+  set(_library_dir "${EP_BINARY_DIR}/HoloPlayCore/dylib/${_dir}")
+  set(${proj}_LIBRARY "${_library_dir}/${_prefix}HoloPlayCore.${_ext}")
+
+  #-----------------------------------------------------------------------------
+  # Launcher setting specific to build tree
+
+  # library paths
+  set(${proj}_LIBRARY_PATHS_LAUNCHER_BUILD ${_library_dir})
+  mark_as_superbuild(
+    VARS ${proj}_LIBRARY_PATHS_LAUNCHER_BUILD
+    LABELS "LIBRARY_PATHS_LAUNCHER_BUILD"
+    )
+
+  #-----------------------------------------------------------------------------
+  # Launcher setting specific to install tree
+
+  # NA
+
 else()
   ExternalProject_Add_Empty(${proj} DEPENDS ${${proj}_DEPENDS})
 endif()

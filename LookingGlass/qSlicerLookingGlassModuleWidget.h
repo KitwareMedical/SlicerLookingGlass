@@ -38,6 +38,11 @@ public:
   virtual ~qSlicerLookingGlassModuleWidget();
 
 public slots:
+  void setLookingGlassConnected(bool connect);
+  void setLookingGlassActive(bool activate);
+  void setReferenceViewNode(vtkMRMLNode*);
+  void updateViewFromReferenceViewCamera();
+  void onDesiredUpdateRateChanged(double);
 
 
 protected:

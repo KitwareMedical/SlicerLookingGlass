@@ -1,5 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource>
     <file>Icons/LookingGlass.png</file>
+    <file>Icons/LookingGlassDisplay.png</file>
+    <file>Icons/LookingGlassDisplayError.png</file>
   </qresource>
 </RCC>

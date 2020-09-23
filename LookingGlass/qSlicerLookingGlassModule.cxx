@@ -136,7 +136,7 @@ void qSlicerLookingGlassModulePrivate::addToolBar()
     this->ToolBar->setObjectName("LookingGlassToolBar");
 
     this->LookingGlassToggleAction = this->ToolBar->addAction(QObject::tr("Show scene in looking glass."));
-    this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlass.png"));
+    this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlassDisplay.png"));
     this->LookingGlassToggleAction->setCheckable(true);
     QObject::connect(this->LookingGlassToggleAction, SIGNAL(toggled(bool)),
                      q, SLOT(enableLookingGlass(bool)));
@@ -198,18 +198,18 @@ void qSlicerLookingGlassModulePrivate::updateToolBar()
   if (!lgViewNode)
     {
     this->LookingGlassToggleAction->setChecked(false);
-    this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlassHeadset.png"));
+    this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlassDisplay.png"));
     }
   else
     {
     this->LookingGlassToggleAction->setChecked(lgViewNode->GetVisibility() && lgViewNode->GetActive());
     if (lgViewNode->HasError())
       {
-      this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlassHeadsetError.png"));
+      this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlassDisplayError.png"));
       }
     else
       {
-      this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlassHeadset.png"));
+      this->LookingGlassToggleAction->setIcon(QIcon(":/Icons/LookingGlassDisplay.png"));
       }
     }
   this->LookingGlassToggleAction->blockSignals(wasBlocked);

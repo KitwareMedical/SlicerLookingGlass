@@ -400,6 +400,104 @@ void qMRMLLookingGlassView::setMRMLLookingGlassViewNode(vtkMRMLLookingGlassViewN
 }
 
 //---------------------------------------------------------------------------
+void qMRMLLookingGlassView::pushFocalPlaneBack()
+{
+  Q_D(qMRMLLookingGlassView);
+
+  vtkMRMLCameraNode* cameraNode = d->CamerasLogic->GetViewActiveCameraNode(d->MRMLLookingGlassViewNode);
+  if (!cameraNode || !cameraNode->GetCamera())
+    {
+    qWarning() << Q_FUNC_INFO << " failed: camera node is not found";
+    return;
+    }
+
+  double fp[3] = {0., 0., 0.};
+  cameraNode->GetFocalPoint(fp);
+
+  double pos[3] = {0., 0., 0.};
+  cameraNode->GetPosition(pos);
+
+  double dx = fp[0] - pos[0];
+  double dy = fp[1] - pos[1];
+  double dz = fp[2] - pos[2];
+  double distance = sqrt(dx * dx + dy * dy + dz * dz);
+
+  double directionOfProjection[3];
+  directionOfProjection[0] = dx / distance;
+  directionOfProjection[1] = dy / distance;
+  directionOfProjection[2] = dz / distance;
+
+  // TODO Add slider widget (min: 0.05, max: 0.5)
+  // Set how far to move the focal plane when pushing or pulling it.
+  // It is a factor applied to the near or far clipping limits.
+  double focalPlaneMovementFactor = 0.2;
+
+  // TODO Add slider widget (min: 0.75, max: 1.5)
+  // Set a limit for the ratio of the far clipping plane to the focal
+  // distance. This is a mechanism to limit parallex and resulting
+  // ghosting when using the looking glass display. The typical value
+  // should be around 1.2.
+  double farClippingLimit = 1.2;
+
+  distance += focalPlaneMovementFactor * distance * (farClippingLimit - 1.0);
+
+  fp[0] = pos[0] + directionOfProjection[0] * distance;
+  fp[1] = pos[1] + directionOfProjection[1] * distance;
+  fp[2] = pos[2] + directionOfProjection[2] * distance;
+  cameraNode->SetFocalPoint(fp);
+
+  cameraNode->Modified();
+}
+
+//---------------------------------------------------------------------------
+void qMRMLLookingGlassView::pullFocalPlaneForward()
+{
+  Q_D(qMRMLLookingGlassView);
+
+  vtkMRMLCameraNode* cameraNode = d->CamerasLogic->GetViewActiveCameraNode(d->MRMLLookingGlassViewNode);
+  if (!cameraNode || !cameraNode->GetCamera())
+    {
+    qWarning() << Q_FUNC_INFO << " failed: camera node is not found";
+    return;
+    }
+
+  double fp[3] = {0., 0., 0.};
+  cameraNode->GetFocalPoint(fp);
+
+  double pos[3] = {0., 0., 0.};
+  cameraNode->GetPosition(pos);
+
+  double dx = fp[0] - pos[0];
+  double dy = fp[1] - pos[1];
+  double dz = fp[2] - pos[2];
+  double distance = sqrt(dx * dx + dy * dy + dz * dz);
+
+  double directionOfProjection[3];
+  directionOfProjection[0] = dx / distance;
+  directionOfProjection[1] = dy / distance;
+  directionOfProjection[2] = dz / distance;
+
+  // TODO Add slider widget (see above)
+  double focalPlaneMovementFactor = 0.2;
+
+  // TODO Add slider widget (min: 0.75, max: 1.5)
+  // Set a limit for the ratio of the near clipping plane to the focal
+  // distance. This is a mechanism to limit parallex and resulting
+  // ghosting when using the looking glass display. The typical value
+  // should be around 0.8.
+  double nearClippingLimit = 0.8;
+
+  distance -= focalPlaneMovementFactor * distance * (1.0 - nearClippingLimit);
+
+  fp[0] = pos[0] + directionOfProjection[0] * distance;
+  fp[1] = pos[1] + directionOfProjection[1] * distance;
+  fp[2] = pos[2] + directionOfProjection[2] * distance;
+  cameraNode->SetFocalPoint(fp);
+
+  cameraNode->Modified();
+}
+
+//---------------------------------------------------------------------------
 void qMRMLLookingGlassView::scheduleRender()
 {
   Q_D(qMRMLLookingGlassView);

@@ -43,7 +43,8 @@ public slots:
   void setReferenceViewNode(vtkMRMLNode*);
   void updateViewFromReferenceViewCamera();
   void onDesiredUpdateRateChanged(double);
-
+  void pullFocalPlaneForward();
+  void pushFocalPlaneBack();
 
 protected:
   QScopedPointer<qSlicerLookingGlassModuleWidgetPrivate> d_ptr;

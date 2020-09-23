@@ -109,6 +109,9 @@ public slots:
 
 //  void onPhysicalToWorldMatrixModified();
 
+  void pushFocalPlaneBack();
+  void pullFocalPlaneForward();
+
   void scheduleRender();
 
 protected:

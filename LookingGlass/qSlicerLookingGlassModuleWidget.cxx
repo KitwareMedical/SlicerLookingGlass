@@ -77,6 +77,8 @@ void qSlicerLookingGlassModuleWidget::setup()
   connect(d->RenderingEnabledCheckBox, SIGNAL(toggled(bool)), this, SLOT(setLookingGlassActive(bool)));
 
   // Display
+  connect(d->FocalPlanePushBackButton, SIGNAL(clicked()), this, SLOT(pushFocalPlaneBack()));
+  connect(d->FocalPlanePullForwardButton, SIGNAL(clicked()), this, SLOT(pullFocalPlaneForward()));
   connect(d->DesiredUpdateRateSlider, SIGNAL(valueChanged(double)), this, SLOT(onDesiredUpdateRateChanged(double)));
   connect(d->UpdateViewFromReferenceViewCameraButton, SIGNAL(clicked()), this, SLOT(updateViewFromReferenceViewCamera()));
 
@@ -140,4 +142,36 @@ void qSlicerLookingGlassModuleWidget::onDesiredUpdateRateChanged(double fps)
     {
     lgViewNode->SetDesiredUpdateRate(fps);
     }
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::pullFocalPlaneForward()
+{
+  qSlicerLookingGlassModule* lgModule = dynamic_cast<qSlicerLookingGlassModule*>(this->module());
+  if (!lgModule)
+    {
+    return;
+    }
+  qMRMLLookingGlassView* lgView = lgModule->viewWidget();
+  if (!lgView)
+    {
+    return;
+    }
+  lgView->pullFocalPlaneForward();
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::pushFocalPlaneBack()
+{
+  qSlicerLookingGlassModule* lgModule = dynamic_cast<qSlicerLookingGlassModule*>(this->module());
+  if (!lgModule)
+    {
+    return;
+    }
+  qMRMLLookingGlassView* lgView = lgModule->viewWidget();
+  if (!lgView)
+    {
+    return;
+    }
+  lgView->pushFocalPlaneBack();
 }

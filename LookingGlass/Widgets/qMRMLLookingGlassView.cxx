@@ -561,8 +561,8 @@ void qMRMLLookingGlassView::updateViewFromReferenceViewCamera()
     {
     return;
     }
-  vtkMRMLViewNode* refrenceViewNode = d->MRMLLookingGlassViewNode->GetReferenceViewNode();
-  if (!refrenceViewNode)
+  vtkMRMLViewNode* referenceViewNode = d->MRMLLookingGlassViewNode->GetReferenceViewNode();
+  if (!referenceViewNode)
     {
     qWarning() << Q_FUNC_INFO << " failed: no reference view node is set";
     return;
@@ -572,60 +572,17 @@ void qMRMLLookingGlassView::updateViewFromReferenceViewCamera()
     qWarning() << Q_FUNC_INFO << " failed: cameras module logic is not set";
     return;
     }
-  vtkMRMLCameraNode* cameraNode = d->CamerasLogic->GetViewActiveCameraNode(refrenceViewNode);
+  vtkMRMLCameraNode* cameraNode = d->CamerasLogic->GetViewActiveCameraNode(referenceViewNode);
   if (!cameraNode || !cameraNode->GetCamera())
     {
-    qWarning() << Q_FUNC_INFO << " failed: camera node is not found";
+    qWarning() << Q_FUNC_INFO << " failed: reference view camera node is not found";
     return;
     }
-  if (!d->RenderWindow)
+  vtkMRMLCameraNode* lgCameraNode = d->CamerasLogic->GetViewActiveCameraNode(d->MRMLLookingGlassViewNode);
+  if (!lgCameraNode || !lgCameraNode->GetCamera())
     {
-    qWarning() << Q_FUNC_INFO << " failed: RenderWindow has not been created";
+    qWarning() << Q_FUNC_INFO << " failed: looking glass camera node is not found";
     return;
     }
-
-  // The following is based on d->RenderWindow->InitializeViewFromCamera(sourceCamera),
-  // but that is not usable for us, as it puts the headset in the focal point (so we
-  // need to step back to see the full content) and snaps view direction to the closest axis.
-
-  vtkCamera* sourceCamera = cameraNode->GetCamera();
-
-  vtkRenderer* ren = static_cast<vtkRenderer*>(d->RenderWindow->GetRenderers()->GetItemAsObject(0));
-  if (!ren)
-    {
-    qWarning() << Q_FUNC_INFO << "The renderer must be set prior to calling InitializeViewFromCamera";
-    return;
-    }
-//  vtkOpenVRCamera* cam = vtkOpenVRCamera::SafeDownCast(ren->GetActiveCamera());
-//  if (!cam)
-//    {
-//    qWarning() << Q_FUNC_INFO << "The renderer's active camera must be set prior to calling InitializeViewFromCamera";
-//    return;
-//    }
-
-  double newPhysicalScale = 100.0; // Default 10x magnification
-
-//  double* sourceViewUp = sourceCamera->GetViewUp();
-//  cam->SetViewUp(sourceViewUp);
-//  d->RenderWindow->SetPhysicalViewUp(sourceViewUp);
-
-//  double* sourcePosition = sourceCamera->GetPosition();
-//  double* viewUp = cam->GetViewUp();
-//  cam->SetFocalPoint(sourcePosition);
-//  d->RenderWindow->SetPhysicalTranslation(
-//    viewUp[0] * newPhysicalScale - sourcePosition[0],
-//    viewUp[1] * newPhysicalScale - sourcePosition[1],
-//    viewUp[2] * newPhysicalScale - sourcePosition[2]);
-
-//  double* sourceDirectionOfProjection = sourceCamera->GetDirectionOfProjection();
-//  d->RenderWindow->SetPhysicalViewDirection(sourceDirectionOfProjection);
-//  double* idop = d->RenderWindow->GetPhysicalViewDirection();
-//  cam->SetPosition(
-//    -idop[0] * newPhysicalScale + sourcePosition[0],
-//    -idop[1] * newPhysicalScale + sourcePosition[1],
-//    -idop[2] * newPhysicalScale + sourcePosition[2]);
-
-//  d->RenderWindow->SetPhysicalScale(newPhysicalScale);
-
-  ren->ResetCameraClippingRange();
+  lgCameraNode->CopyContent(cameraNode);
 }

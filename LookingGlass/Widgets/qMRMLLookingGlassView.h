@@ -94,7 +94,7 @@ public:
   /// Get LookingGlass interface
   Q_INVOKABLE vtkLookingGlassInterface* lookingGlassTnterface()const;
 
-  /// Get underlying RenderWindow
+  /// Get underlying RenderWindow interactor
   Q_INVOKABLE vtkRenderWindowInteractor* interactor()const;
 
   /// Initialize the looking glass view to most closely
@@ -111,7 +111,47 @@ public slots:
   void pushFocalPlaneBack();
   void pullFocalPlaneForward();
 
-  void scheduleRender();
+  /// Notify that the view needs to be rendered.
+  /// scheduleRender() respects the maximum update rate of the view,
+  /// it won't render the window more frequently than what the maximum
+  /// update rate is.
+  /// \sa setMaximumUpdateRate
+  virtual void scheduleRender();
+
+  /// Force a render even if a render is already ocurring
+  /// Be careful when calling forceRender() as it can slow down your
+  /// application. It is preferable to use scheduleRender() instead.
+  /// \sa scheduleRender
+  virtual void forceRender();
+
+  /// Set maximum rate for rendering (in frames per second).
+  /// If rendering is requested more frequently than this rate using scheduleRender,
+  /// actual rendering will happen at this rate.
+  /// This mechanism prevents repeated rendering caused by cluster of rendering requests.
+  ///
+  /// If maximum update rate is set to 0 then it indicates that rendering is done next time
+  /// the application is idle, i.e., pending timer events are processed. This option should be used
+  /// with caution, as policy of timer event processing may differ between operating systems.
+  /// Specifically, on macOS, timer events may be indefinitely delayed if user interface continuously
+  /// generates events.
+  ///
+  /// RenderWindow's DesiredUpdateRate property is intended for determining rendering quality settings,
+  /// and is not suitable to be used as maximum update rate. The main reason is that VTK usually makes the
+  /// rendering much faster and lower quality than DesiredUpdateRate would dictate, and so it would
+  /// unnecessarily decrease the actual refresh rate.
+  ///
+  /// By default maximum update rate is set to 60FPS, which allows smooth updates, while effectively
+  /// suppressing repeated update requests (after a rendering has been completed,
+  /// repeated rendering requests will be ignored for 17 milliseconds).
+  ///
+  /// \sa scheduleRender
+//  void setMaximumUpdateRate(double fps);
+
+protected slots:
+
+  /// Calls forceRender if the rendering has not been paused from pauseRender()
+  /// \sa pauseRender
+  virtual void requestRender();
 
 protected:
 

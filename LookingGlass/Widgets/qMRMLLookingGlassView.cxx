@@ -93,6 +93,7 @@
 qMRMLLookingGlassViewPrivate::qMRMLLookingGlassViewPrivate(qMRMLLookingGlassView& object)
   : q_ptr(&object)
   , CamerasLogic(nullptr)
+  , RequestTimer(nullptr)
 {
   this->MRMLLookingGlassViewNode = nullptr;
 }
@@ -105,7 +106,12 @@ qMRMLLookingGlassViewPrivate::~qMRMLLookingGlassViewPrivate()
 //---------------------------------------------------------------------------
 void qMRMLLookingGlassViewPrivate::init()
 {
-//  QObject::connect(&this->LookingGlassLoopTimer, SIGNAL(timeout()), this, SLOT(doLookingGlass()));
+  Q_Q(qMRMLLookingGlassView);
+
+  this->RequestTimer = new QTimer(q);
+  this->RequestTimer->setSingleShot(true);
+  QObject::connect(this->RequestTimer, SIGNAL(timeout()),
+                   q, SLOT(requestRender()));
 }
 
 //----------------------------------------------------------------------------
@@ -163,14 +169,23 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
   this->Renderer = vtkSmartPointer<vtkRenderer>::New();
   this->Interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
   this->InteractorStyle = vtkSmartPointer<vtkMRMLThreeDViewInteractorStyle>::New();
-//  this->Interactor->SetInteractorStyle(this->InteractorStyle);
-//  this->InteractorStyle->SetInteractor(this->Interactor);
-//  this->InteractorStyle->SetCurrentRenderer(this->Renderer);
+
+  this->Interactor->SetInteractorStyle(this->InteractorStyle);
+  this->InteractorStyle->SetInteractor(this->Interactor);
+  this->InteractorStyle->SetCurrentRenderer(this->Renderer);
+
   this->Camera = vtkSmartPointer<vtkCamera>::New();
   this->Renderer->SetActiveCamera(this->Camera);
   this->RenderWindow->SetMultiSamples(0);
   this->RenderWindow->AddRenderer(this->Renderer);
   this->RenderWindow->SetInteractor(this->Interactor);
+
+  // The interactor never calls Render() on the render window.
+  this->Interactor->SetEnableRender(false);
+
+  // Ensure this view catches all render requests and ensure the desired framerate
+  this->qvtkReconnect(this->RenderWindow->GetInteractor(), this->Interactor,
+                vtkCommand::RenderEvent, q, SLOT(scheduleRender()));
 
   vtkMRMLLookingGlassViewDisplayableManagerFactory* factory
     = vtkMRMLLookingGlassViewDisplayableManagerFactory::GetInstance();
@@ -481,13 +496,6 @@ void qMRMLLookingGlassView::pullFocalPlaneForward()
 }
 
 //---------------------------------------------------------------------------
-void qMRMLLookingGlassView::scheduleRender()
-{
-  Q_D(qMRMLLookingGlassView);
-  d->RenderWindow->Render();
-}
-
-//---------------------------------------------------------------------------
 vtkMRMLLookingGlassViewNode* qMRMLLookingGlassView::mrmlLookingGlassViewNode()const
 {
   Q_D(const qMRMLLookingGlassView);
@@ -559,3 +567,100 @@ void qMRMLLookingGlassView::updateViewFromReferenceViewCamera()
     }
   lgCameraNode->CopyContent(cameraNode);
 }
+
+//----------------------------------------------------------------------------
+void qMRMLLookingGlassView::scheduleRender()
+{
+  Q_D(qMRMLLookingGlassView);
+
+  //logger.trace(QString("scheduleRender - RenderEnabled: %1 - Request render elapsed: %2ms").
+  //             arg(d->RenderEnabled ? "true" : "false")
+  //             .arg(d->RequestTime.elapsed()));
+
+  if (!d->MRMLLookingGlassViewNode->GetActive())
+    {
+    return;
+    }
+
+  double msecsBeforeRender = 0;
+  // If the MaximumUpdateRate is set to 0 then it indicates that rendering is done next time
+  // the application is idle.
+  if (d->MRMLLookingGlassViewNode->GetDesiredUpdateRate() > 0.0)
+    {
+    msecsBeforeRender = 1000. / d->MRMLLookingGlassViewNode->GetDesiredUpdateRate();
+    }
+//  if(d->VTKWidget->testAttribute(Qt::WA_WState_InPaintEvent))
+//    {
+//    // If the request comes from the system (widget exposed, resized...), the
+//    // render must be done immediately.
+//    this->requestRender();
+//    }
+//  else
+  if (!d->RequestTime.isValid())
+    {
+    d->RequestTime.start();
+    d->RequestTimer->start(static_cast<int>(msecsBeforeRender));
+    }
+  else if (d->RequestTime.elapsed() > msecsBeforeRender)
+    {
+    // The rendering hasn't still be done, but msecsBeforeRender milliseconds
+    // have already been elapsed, it is likely that RequestTimer has already
+    // timed out, but the event queue hasn't been processed yet, rendering is
+    // done now to ensure the desired framerate is respected.
+    this->requestRender();
+    }
+}
+
+//----------------------------------------------------------------------------
+void qMRMLLookingGlassView::requestRender()
+{
+  Q_D(const qMRMLLookingGlassView);
+
+//  if (this->isRenderPaused())
+//    {
+//    return;
+//    }
+  this->forceRender();
+}
+
+//----------------------------------------------------------------------------
+void qMRMLLookingGlassView::forceRender()
+{
+  Q_D(qMRMLLookingGlassView);
+
+  if (this->sender() == d->RequestTimer  &&
+      !d->RequestTime.isValid())
+    {
+    // The slot associated to the timeout signal is now called, however the
+    // render has already been executed meanwhile. There is no need to do it
+    // again.
+    return;
+    }
+
+  // The timer can be stopped if it hasn't timed out yet.
+  d->RequestTimer->stop();
+  d->RequestTime = QTime();
+
+  //logger.trace(QString("forceRender - RenderEnabled: %1")
+  //             .arg(d->RenderEnabled ? "true" : "false"));
+
+  if (!d->MRMLLookingGlassViewNode->GetActive() || !d->MRMLLookingGlassViewNode->GetVisibility())
+    {
+    return;
+    }
+  d->RenderWindow->Render();
+}
+
+////----------------------------------------------------------------------------
+//double qMRMLLookingGlassView::maximumUpdateRate()const
+//{
+//  Q_D(const qMRMLLookingGlassView);
+//  return d->MaximumUpdateRate;
+//}
+
+////----------------------------------------------------------------------------
+//void qMRMLLookingGlassView::setMaximumUpdateRate(double fps)
+//{
+//  Q_D(qMRMLLookingGlassView);
+//  d->MaximumUpdateRate = fps;
+//}

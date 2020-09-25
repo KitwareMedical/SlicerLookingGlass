@@ -44,6 +44,7 @@
 #include "qMRMLLookingGlassView.h"
 
 // Qt includes
+#include <QTime>
 #include <QTimer>
 
 class QLabel;
@@ -103,6 +104,10 @@ protected:
   double LastViewDirection[3];
   double LastViewUp[3];
   double LastViewPosition[3];
+
+  // Copied from ctkVTKAbstractViewPrivate
+  QTimer*                                       RequestTimer;
+  QTime                                         RequestTime;
 
 //  QTimer LookingGlassLoopTimer;
 };

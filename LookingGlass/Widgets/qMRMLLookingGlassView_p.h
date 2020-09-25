@@ -78,11 +78,9 @@ public:
   void stopLookingGlass();
 
   double desiredUpdateRate();
-  double stillUpdateRate();
 
 public slots:
   void updateWidgetFromMRML();
-//  void doLookingGlass();
 
 protected:
   void createRenderWindow();

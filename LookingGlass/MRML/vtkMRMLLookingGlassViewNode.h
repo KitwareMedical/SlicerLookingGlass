@@ -31,7 +31,6 @@ class VTK_SLICER_LOOKINGGLASS_MODULE_MRML_EXPORT vtkMRMLLookingGlassViewNode
   : public vtkMRMLViewNode
 {
 public:
-  static const char* GetVirtualRealityInteractionTransformAttributeName() { return "VirtualReality.InteractionTransform"; };
 
   static vtkMRMLLookingGlassViewNode* New();
   vtkTypeMacro(vtkMRMLLookingGlassViewNode, vtkMRMLViewNode);

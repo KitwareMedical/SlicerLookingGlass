@@ -104,14 +104,9 @@ public:
   /// Get underlying RenderWindow
   Q_INVOKABLE bool isHardwareConnected()const;
 
-signals:
-  void physicalToWorldMatrixModified();
-
 public slots:
   /// Set the current \a viewNode to observe
   void setMRMLLookingGlassViewNode(vtkMRMLLookingGlassViewNode* newViewNode);
-
-//  void onPhysicalToWorldMatrixModified();
 
   void pushFocalPlaneBack();
   void pullFocalPlaneForward();

@@ -323,7 +323,6 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
 //---------------------------------------------------------------------------
 double qMRMLLookingGlassViewPrivate::desiredUpdateRate()
 {
-  Q_Q(qMRMLLookingGlassView);
   double rate = this->MRMLLookingGlassViewNode->GetDesiredUpdateRate();
 
   // enforce non-zero frame rate to avoid division by zero errors
@@ -335,73 +334,6 @@ double qMRMLLookingGlassViewPrivate::desiredUpdateRate()
 
   return rate;
 }
-
-//---------------------------------------------------------------------------
-double qMRMLLookingGlassViewPrivate::stillUpdateRate()
-{
-  Q_Q(qMRMLLookingGlassView);
-  return 0.0001;
-}
-
-// --------------------------------------------------------------------------
-//void qMRMLLookingGlassViewPrivate::doLookingGlass()
-//{
-//  if (this->Interactor && this->RenderWindow /*&& this->RenderWindow->GetHMD()*/ && this->Renderer)
-//  {
-////    this->Interactor->DoOneEvent(this->RenderWindow, this->Renderer);
-
-//    this->LastViewUpdateTime->StopTimer();
-//    if (this->LastViewUpdateTime->GetElapsedTime() > 0.0)
-//    {
-////      bool quickViewMotion = true;
-
-////      if (this->MRMLLookingGlassViewNode->GetMotionSensitivity() > 0.999)
-////      {
-////        quickViewMotion = true;
-////      }
-////      else if (this->MRMLLookingGlassViewNode->GetMotionSensitivity() <= 0.001)
-////      {
-////        quickViewMotion = false;
-////      }
-////      else if (this->LastViewUpdateTime->GetElapsedTime() < 3.0) // don't consider stale measurements
-////      {
-////        // limit scale:
-////        // sensitivity = 0    -> limit = 10.0x
-////        // sensitivity = 50%  -> limit =  1.0x
-////        // sensitivity = 100% -> limit =  0.1x
-////        double limitScale = pow(100, 0.5 - this->MRMLLookingGlassViewNode->GetMotionSensitivity());
-
-////        const double angularSpeedLimitRadiansPerSec = vtkMath::RadiansFromDegrees(5.0 * limitScale);
-////        double viewDirectionChangeSpeed = vtkMath::AngleBetweenVectors(this->LastViewDirection,
-////                                          this->Camera->GetViewPlaneNormal()) / this->LastViewUpdateTime->GetElapsedTime();
-////        double viewUpDirectionChangeSpeed = vtkMath::AngleBetweenVectors(this->LastViewUp,
-////                                            this->Camera->GetViewUp()) / this->LastViewUpdateTime->GetElapsedTime();
-
-////        const double translationSpeedLimitMmPerSec = 100.0 * limitScale;
-////        // Physical scale = 100 if virtual objects are real-world size; <100 if virtual objects are larger
-////        double viewTranslationSpeedMmPerSec = this->RenderWindow->GetPhysicalScale() * 0.01 *
-////                                              sqrt(vtkMath::Distance2BetweenPoints(this->LastViewPosition, this->Camera->GetPosition()))
-////                                              / this->LastViewUpdateTime->GetElapsedTime();
-
-////        if (viewDirectionChangeSpeed < angularSpeedLimitRadiansPerSec
-////            && viewUpDirectionChangeSpeed < angularSpeedLimitRadiansPerSec
-////            && viewTranslationSpeedMmPerSec  < translationSpeedLimitMmPerSec)
-////        {
-////          quickViewMotion = false;
-////        }
-////      }
-
-////      double updateRate = quickViewMotion ? this->desiredUpdateRate() : this->stillUpdateRate();
-////      this->RenderWindow->SetDesiredUpdateRate(updateRate);
-
-////      this->Camera->GetViewPlaneNormal(this->LastViewDirection);
-////      this->Camera->GetViewUp(this->LastViewUp);
-////      this->Camera->GetPosition(this->LastViewPosition);
-
-//      this->LastViewUpdateTime->StartTimer();
-//    }
-//  }
-//}
 
 // --------------------------------------------------------------------------
 // qMRMLLookingGlassView methods
@@ -588,16 +520,6 @@ bool qMRMLLookingGlassView::isHardwareConnected()const
   // connected successfully
   return true;
 }
-
-////------------------------------------------------------------------------------
-//void qMRMLLookingGlassView::onPhysicalToWorldMatrixModified()
-//{
-//  Q_D(qMRMLLookingGlassView);
-
-//  d->MRMLLookingGlassViewNode->SetMagnification(d->InteractorStyle->GetMagnification());
-
-//  emit physicalToWorldMatrixModified();
-//}
 
 //---------------------------------------------------------------------------
 void qMRMLLookingGlassView::updateViewFromReferenceViewCamera()

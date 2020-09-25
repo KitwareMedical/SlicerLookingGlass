@@ -107,14 +107,6 @@ void qSlicerLookingGlassModulePrivate::addViewWidget()
     {
     qWarning() << "Cameras module is not found";
     }
-
-//  qSlicerLookingGlassModuleWidget* moduleWidget =
-//    dynamic_cast<qSlicerLookingGlassModuleWidget*>(q->widgetRepresentation());
-//  if (moduleWidget)
-//    {
-//    QObject::connect(this->LookingGlassViewWidget, SIGNAL(physicalToWorldMatrixModified()),
-//                     moduleWidget, SLOT(onPhysicalToWorldMatrixModified()));
-//    }
 }
 
 //-----------------------------------------------------------------------------

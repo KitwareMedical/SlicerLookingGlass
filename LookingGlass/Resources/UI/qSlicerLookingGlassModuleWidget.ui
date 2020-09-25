@@ -202,14 +202,27 @@
        </layout>
       </item>
       <item row="2" column="0">
+       <widget class="QLabel" name="UseClippingLimitsLabel">
+        <property name="text">
+         <string>Use clipping limits:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="ctkCheckBox" name="UseClippingLimitsCheckBox"/>
+      </item>
+      <item row="3" column="0">
        <widget class="QLabel" name="NearClippingLimitLabel">
         <property name="text">
          <string>Near clipping limit:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="ctkSliderWidget" name="NearClippingLimitSlider">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string>Limit for the ratio of the near clipping plane to the focal distance. This is a mechanism to limit parallax and resulting ghosting when using the looking glass display.</string>
         </property>
@@ -233,15 +246,18 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="FarClippingLimitLabel">
         <property name="text">
          <string>Far clipping limit:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="ctkSliderWidget" name="FarClippingLimitSlider">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string>Limit for the ratio of the far clipping plane to the focal distance. This is a mechanism to limit parallax and resulting ghosting when using the looking glass display</string>
         </property>

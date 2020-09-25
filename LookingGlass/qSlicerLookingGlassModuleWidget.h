@@ -43,6 +43,7 @@ public slots:
   void setReferenceViewNode(vtkMRMLNode*);
   void updateViewFromReferenceViewCamera();
   void onDesiredUpdateRateChanged(double);
+  void setUseClippingLimits(bool);
   void onNearClippingLimitChanged(double);
   void onFarClippingLimitChanged(double);
   void pullFocalPlaneForward();

@@ -84,6 +84,7 @@ void qSlicerLookingGlassModuleWidget::setup()
   connect(d->ReferenceViewNodeComboBox, SIGNAL(currentNodeChanged(vtkMRMLNode*)), this, SLOT(setReferenceViewNode(vtkMRMLNode*)));
   connect(d->FocalPlanePushBackButton, SIGNAL(clicked()), this, SLOT(pushFocalPlaneBack()));
   connect(d->FocalPlanePullForwardButton, SIGNAL(clicked()), this, SLOT(pullFocalPlaneForward()));
+  connect(d->UseClippingLimitsCheckBox, SIGNAL(toggled(bool)), this, SLOT(setUseClippingLimits(bool)));
   connect(d->NearClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onNearClippingLimitChanged(double)));
   connect(d->FarClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onFarClippingLimitChanged(double)));
 }
@@ -144,6 +145,23 @@ void qSlicerLookingGlassModuleWidget::onDesiredUpdateRateChanged(double fps)
     {
     lgViewNode->SetDesiredUpdateRate(fps);
     }
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::setUseClippingLimits(bool activate)
+{
+  Q_D(qSlicerLookingGlassModuleWidget);
+  vtkSlicerLookingGlassLogic* lgLogic = vtkSlicerLookingGlassLogic::SafeDownCast(this->logic());
+  vtkMRMLLookingGlassViewNode* lgViewNode = lgLogic->GetLookingGlassViewNode();
+  if (lgViewNode)
+    {
+    lgViewNode->SetUseClippingLimits(activate);
+    }
+
+  // Update UI
+  // TODO Update UI by observing view node
+  d->NearClippingLimitSlider->setEnabled(activate);
+  d->FarClippingLimitSlider->setEnabled(activate);
 }
 
 //-----------------------------------------------------------------------------

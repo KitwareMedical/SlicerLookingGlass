@@ -31,6 +31,7 @@ vtkMRMLNodeNewMacro(vtkMRMLLookingGlassViewNode);
 //----------------------------------------------------------------------------
 vtkMRMLLookingGlassViewNode::vtkMRMLLookingGlassViewNode()
   : DesiredUpdateRate(60.0)
+  , UseClippingLimits(false)
   , NearClippingLimit(0.8)
   , FarClippingLimit(1.2)
 
@@ -62,6 +63,7 @@ void vtkMRMLLookingGlassViewNode::WriteXML(ostream& of, int nIndent)
 
   vtkMRMLWriteXMLBeginMacro(of);
   vtkMRMLWriteXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
+  vtkMRMLWriteXMLBooleanMacro(useClippingLimits, UseClippingLimits);
   vtkMRMLWriteXMLFloatMacro(nearClippingLimit, NearClippingLimit);
   vtkMRMLWriteXMLFloatMacro(farClippingLimit, FarClippingLimit);
   vtkMRMLWriteXMLEndMacro();
@@ -76,6 +78,7 @@ void vtkMRMLLookingGlassViewNode::ReadXMLAttributes(const char** atts)
 
   vtkMRMLReadXMLBeginMacro(atts);
   vtkMRMLReadXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
+  vtkMRMLReadXMLBooleanMacro(useClippingLimits, UseClippingLimits);
   vtkMRMLReadXMLFloatMacro(nearClippingLimit, NearClippingLimit);
   vtkMRMLReadXMLFloatMacro(farClippingLimit, FarClippingLimit);
   vtkMRMLReadXMLEndMacro();
@@ -94,6 +97,7 @@ void vtkMRMLLookingGlassViewNode::Copy(vtkMRMLNode* anode)
 
   vtkMRMLCopyBeginMacro(anode);
   vtkMRMLCopyFloatMacro(DesiredUpdateRate);
+  vtkMRMLCopyBooleanMacro(UseClippingLimits);
   vtkMRMLCopyFloatMacro(NearClippingLimit);
   vtkMRMLCopyFloatMacro(FarClippingLimit);
   vtkMRMLCopyEndMacro();
@@ -108,6 +112,7 @@ void vtkMRMLLookingGlassViewNode::PrintSelf(ostream& os, vtkIndent indent)
 
   vtkMRMLPrintBeginMacro(os, indent);
   vtkMRMLPrintFloatMacro(DesiredUpdateRate);
+  vtkMRMLPrintBooleanMacro(UseClippingLimits);
   vtkMRMLPrintFloatMacro(NearClippingLimit);
   vtkMRMLPrintFloatMacro(FarClippingLimit);
   vtkMRMLPrintEndMacro();

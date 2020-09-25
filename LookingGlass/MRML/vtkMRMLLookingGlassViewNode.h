@@ -78,6 +78,10 @@ public:
   vtkGetMacro(DesiredUpdateRate, double);
   vtkSetMacro(DesiredUpdateRate, double);
 
+  /// Turn on/off use of near and far clipping limits.
+  vtkGetMacro(UseClippingLimits, bool);
+  vtkSetMacro(UseClippingLimits, bool);
+
   /// Near clipping limit.
   /// A limit for the ratio of the near clipping plane to the focal
   /// distance. This is a mechanism to limit parallax and resulting
@@ -110,6 +114,7 @@ public:
 
 protected:
   double DesiredUpdateRate;
+  bool UseClippingLimits;
   double NearClippingLimit;
   double FarClippingLimit;
 

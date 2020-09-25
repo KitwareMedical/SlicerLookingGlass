@@ -291,10 +291,14 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
       return;
       }
 
+    // Use clipping limits
+    q->lookingGlassTnterface()->SetUseClippingLimits(this->MRMLLookingGlassViewNode->GetUseClippingLimits());
+
     // Near range limit
     double previousNearClippingLimit = q->lookingGlassTnterface()->GetNearClippingLimit();
     q->lookingGlassTnterface()->SetNearClippingLimit(this->MRMLLookingGlassViewNode->GetNearClippingLimit());
-    if (!vtkMathUtilities::FuzzyCompare<double>(previousNearClippingLimit, this->MRMLLookingGlassViewNode->GetNearClippingLimit()))
+    if (this->MRMLLookingGlassViewNode->GetUseClippingLimits() &&
+        !vtkMathUtilities::FuzzyCompare<double>(previousNearClippingLimit, this->MRMLLookingGlassViewNode->GetNearClippingLimit()))
       {
       // Trigger re-render
       cameraNode->Modified();
@@ -303,7 +307,8 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
     // Far range limit
     double previousFarClippingLimit = q->lookingGlassTnterface()->GetFarClippingLimit();
     q->lookingGlassTnterface()->SetFarClippingLimit(this->MRMLLookingGlassViewNode->GetFarClippingLimit());
-    if (!vtkMathUtilities::FuzzyCompare<double>(previousFarClippingLimit, this->MRMLLookingGlassViewNode->GetFarClippingLimit()))
+    if (this->MRMLLookingGlassViewNode->GetUseClippingLimits() &&
+        !vtkMathUtilities::FuzzyCompare<double>(previousFarClippingLimit, this->MRMLLookingGlassViewNode->GetFarClippingLimit()))
       {
       // Trigger re-render
       cameraNode->Modified();

@@ -201,6 +201,70 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="NearClippingLimitLabel">
+        <property name="text">
+         <string>Near clipping limit:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="ctkSliderWidget" name="NearClippingLimitSlider">
+        <property name="toolTip">
+         <string>Limit for the ratio of the near clipping plane to the focal distance. This is a mechanism to limit parallax and resulting ghosting when using the looking glass display.</string>
+        </property>
+        <property name="decimals">
+         <number>2</number>
+        </property>
+        <property name="singleStep">
+         <double>0.01</double>
+        </property>
+        <property name="pageStep">
+         <double>0.1</double>
+        </property>
+        <property name="minimum">
+         <double>0.75</double>
+        </property>
+        <property name="maximum">
+         <double>1.5</double>
+        </property>
+        <property name="value">
+         <double>0.8</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="FarClippingLimitLabel">
+        <property name="text">
+         <string>Far clipping limit:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="ctkSliderWidget" name="FarClippingLimitSlider">
+        <property name="toolTip">
+         <string>Limit for the ratio of the far clipping plane to the focal distance. This is a mechanism to limit parallax and resulting ghosting when using the looking glass display</string>
+        </property>
+        <property name="decimals">
+         <number>2</number>
+        </property>
+        <property name="singleStep">
+         <double>0.01</double>
+        </property>
+        <property name="pageStep">
+         <double>0.1</double>
+        </property>
+        <property name="minimum">
+         <double>0.75</double>
+        </property>
+        <property name="maximum">
+         <double>1.5</double>
+        </property>
+        <property name="value">
+         <double>1.2</double>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

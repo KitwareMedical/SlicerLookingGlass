@@ -40,6 +40,7 @@ class vtkGenericOpenGLRenderWindow;
 class vtkRenderWindowInteractor;
 class vtkSlicerCamerasModuleLogic;
 
+class vtkLookingGlassInterface;
 //class vtkOpenVRRenderer;
 class vtkOpenGLRenderWindow;
 class vtkRenderWindowInteractor;
@@ -89,6 +90,9 @@ public:
 
   /// Get underlying RenderWindow
   Q_INVOKABLE vtkOpenGLRenderWindow* renderWindow()const;
+
+  /// Get LookingGlass interface
+  Q_INVOKABLE vtkLookingGlassInterface* lookingGlassTnterface()const;
 
   /// Get underlying RenderWindow
   Q_INVOKABLE vtkRenderWindowInteractor* interactor()const;

@@ -31,6 +31,9 @@ vtkMRMLNodeNewMacro(vtkMRMLLookingGlassViewNode);
 //----------------------------------------------------------------------------
 vtkMRMLLookingGlassViewNode::vtkMRMLLookingGlassViewNode()
   : DesiredUpdateRate(60.0)
+  , NearClippingLimit(0.8)
+  , FarClippingLimit(1.2)
+
 {
   this->Visibility = 0; // hidden by default to not connect to the headset until it is needed
   this->BackgroundColor[0] = this->defaultBackgroundColor()[0];
@@ -59,6 +62,8 @@ void vtkMRMLLookingGlassViewNode::WriteXML(ostream& of, int nIndent)
 
   vtkMRMLWriteXMLBeginMacro(of);
   vtkMRMLWriteXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
+  vtkMRMLWriteXMLFloatMacro(nearClippingLimit, NearClippingLimit);
+  vtkMRMLWriteXMLFloatMacro(farClippingLimit, FarClippingLimit);
   vtkMRMLWriteXMLEndMacro();
 }
 
@@ -71,6 +76,8 @@ void vtkMRMLLookingGlassViewNode::ReadXMLAttributes(const char** atts)
 
   vtkMRMLReadXMLBeginMacro(atts);
   vtkMRMLReadXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
+  vtkMRMLReadXMLFloatMacro(nearClippingLimit, NearClippingLimit);
+  vtkMRMLReadXMLFloatMacro(farClippingLimit, FarClippingLimit);
   vtkMRMLReadXMLEndMacro();
 
   this->EndModify(disabledModify);
@@ -87,6 +94,8 @@ void vtkMRMLLookingGlassViewNode::Copy(vtkMRMLNode* anode)
 
   vtkMRMLCopyBeginMacro(anode);
   vtkMRMLCopyFloatMacro(DesiredUpdateRate);
+  vtkMRMLCopyFloatMacro(NearClippingLimit);
+  vtkMRMLCopyFloatMacro(FarClippingLimit);
   vtkMRMLCopyEndMacro();
 
   this->EndModify(disabledModify);
@@ -99,6 +108,8 @@ void vtkMRMLLookingGlassViewNode::PrintSelf(ostream& os, vtkIndent indent)
 
   vtkMRMLPrintBeginMacro(os, indent);
   vtkMRMLPrintFloatMacro(DesiredUpdateRate);
+  vtkMRMLPrintFloatMacro(NearClippingLimit);
+  vtkMRMLPrintFloatMacro(FarClippingLimit);
   vtkMRMLPrintEndMacro();
 }
 

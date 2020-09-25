@@ -79,6 +79,22 @@ public:
   vtkGetMacro(DesiredUpdateRate, double);
   vtkSetMacro(DesiredUpdateRate, double);
 
+  /// Near clipping limit.
+  /// A limit for the ratio of the near clipping plane to the focal
+  /// distance. This is a mechanism to limit parallax and resulting
+  /// ghosting when using the looking glass display. The typical value
+  /// should be around 0.8.
+  vtkGetMacro(NearClippingLimit, double);
+  vtkSetMacro(NearClippingLimit, double);
+
+  /// Far clipping limit.
+  /// A limit for the ratio of the far clipping plane to the focal
+  /// distance. This is a mechanism to limit parallax and resulting
+  /// ghosting when using the looking glass display. The typical value
+  /// should be around 1.2.
+  vtkGetMacro(FarClippingLimit, double);
+  vtkSetMacro(FarClippingLimit, double);
+
   /// Return true if an error has occurred.
   /// "Connected" member requests connection but this method can tell if the
   /// hardware connection has been actually successfully established.
@@ -95,6 +111,8 @@ public:
 
 protected:
   double DesiredUpdateRate;
+  double NearClippingLimit;
+  double FarClippingLimit;
 
   std::string LastErrorMessage;
 

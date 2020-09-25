@@ -84,6 +84,8 @@ void qSlicerLookingGlassModuleWidget::setup()
 
   // Advanced
   connect(d->ReferenceViewNodeComboBox, SIGNAL(currentNodeChanged(vtkMRMLNode*)), this, SLOT(setReferenceViewNode(vtkMRMLNode*)));
+  connect(d->NearClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onNearClippingLimitChanged(double)));
+  connect(d->FarClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onFarClippingLimitChanged(double)));
 }
 
 //-----------------------------------------------------------------------------
@@ -141,6 +143,30 @@ void qSlicerLookingGlassModuleWidget::onDesiredUpdateRateChanged(double fps)
   if (lgViewNode)
     {
     lgViewNode->SetDesiredUpdateRate(fps);
+    }
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::onNearClippingLimitChanged(double limit)
+{
+  Q_D(qSlicerLookingGlassModuleWidget);
+  vtkSlicerLookingGlassLogic* lgLogic = vtkSlicerLookingGlassLogic::SafeDownCast(this->logic());
+  vtkMRMLLookingGlassViewNode* lgViewNode = lgLogic->GetLookingGlassViewNode();
+  if (lgViewNode)
+    {
+    lgViewNode->SetNearClippingLimit(limit);
+    }
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::onFarClippingLimitChanged(double limit)
+{
+  Q_D(qSlicerLookingGlassModuleWidget);
+  vtkSlicerLookingGlassLogic* lgLogic = vtkSlicerLookingGlassLogic::SafeDownCast(this->logic());
+  vtkMRMLLookingGlassViewNode* lgViewNode = lgLogic->GetLookingGlassViewNode();
+  if (lgViewNode)
+    {
+    lgViewNode->SetFarClippingLimit(limit);
     }
 }
 

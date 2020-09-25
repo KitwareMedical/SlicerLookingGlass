@@ -68,14 +68,23 @@
 #include <vtkCamera.h>
 #include <vtkCollection.h>
 #include <vtkCullerCollection.h>
+#include <vtkMathUtilities.h>
 #include <vtkNew.h>
 #include <vtkOpenGLFramebufferObject.h>
 #include <vtkOpenGLRenderWindow.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderer.h>
 #include <vtkRendererCollection.h>
+#include <vtkRenderingOpenGLConfigure.h> // For VTK_USE_X, VTK_USE_COCOA
 #include <vtkSmartPointer.h>
 #include <vtkTimerLog.h>
+#if defined(VTK_USE_X)
+# include <vtkXLookingGlassRenderWindow.h>
+#elif defined(Q_OS_WIN)
+# include <vtkWin32LookingGlassRenderWindow.h>
+#elif defined(VTK_USE_COCOA)
+# include <vtkCocoaLookingGlassRenderWindow.h>
+#endif
 
 //--------------------------------------------------------------------------
 // qMRMLLookingGlassViewPrivate methods
@@ -108,6 +117,24 @@ CTK_GET_CPP(qMRMLLookingGlassView, vtkRenderer*, renderer, Renderer);
 
 //----------------------------------------------------------------------------
 CTK_GET_CPP(qMRMLLookingGlassView, vtkOpenGLRenderWindow*, renderWindow, RenderWindow);
+
+//----------------------------------------------------------------------------
+vtkLookingGlassInterface* qMRMLLookingGlassView::lookingGlassTnterface()const
+{
+  Q_D(const qMRMLLookingGlassView);
+#if defined(VTK_USE_X)
+  vtkXLookingGlassRenderWindow* renderWindow = vtkXLookingGlassRenderWindow::SafeDownCast(d->RenderWindow);
+  return renderWindow->GetInterface();
+#elif defined(Q_OS_WIN)
+  vtkWin32LookingGlassRenderWindow* renderWindow = vtkWin32LookingGlassRenderWindow::SafeDownCast(d->RenderWindow);
+  return renderWindow->GetInterface();
+#elif defined(VTK_USE_COCOA)
+  vtkCocoaLookingGlassRenderWindow* renderWindow = vtkCocoaLookingGlassRenderWindow::SafeDownCast(d->RenderWindow);
+  return renderWindow->GetInterface();
+#else
+  return nullptr;
+#endif
+}
 
 //----------------------------------------------------------------------------
 CTK_GET_CPP(qMRMLLookingGlassView, vtkRenderWindowInteractor*, interactor, Interactor);
@@ -256,6 +283,31 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
   {
     // Desired update rate
     this->RenderWindow->SetDesiredUpdateRate(this->desiredUpdateRate());
+
+    vtkMRMLCameraNode* cameraNode = this->CamerasLogic->GetViewActiveCameraNode(this->MRMLLookingGlassViewNode);
+    if (!cameraNode || !cameraNode->GetCamera())
+      {
+      qWarning() << Q_FUNC_INFO << " failed: camera node is not found";
+      return;
+      }
+
+    // Near range limit
+    double previousNearClippingLimit = q->lookingGlassTnterface()->GetNearClippingLimit();
+    q->lookingGlassTnterface()->SetNearClippingLimit(this->MRMLLookingGlassViewNode->GetNearClippingLimit());
+    if (!vtkMathUtilities::FuzzyCompare<double>(previousNearClippingLimit, this->MRMLLookingGlassViewNode->GetNearClippingLimit()))
+      {
+      // Trigger re-render
+      cameraNode->Modified();
+      }
+
+    // Far range limit
+    double previousFarClippingLimit = q->lookingGlassTnterface()->GetFarClippingLimit();
+    q->lookingGlassTnterface()->SetFarClippingLimit(this->MRMLLookingGlassViewNode->GetFarClippingLimit());
+    if (!vtkMathUtilities::FuzzyCompare<double>(previousFarClippingLimit, this->MRMLLookingGlassViewNode->GetFarClippingLimit()))
+      {
+      // Trigger re-render
+      cameraNode->Modified();
+      }
   }
 
 //  if (this->MRMLLookingGlassViewNode->GetActive())
@@ -432,12 +484,9 @@ void qMRMLLookingGlassView::pushFocalPlaneBack()
   // It is a factor applied to the near or far clipping limits.
   double focalPlaneMovementFactor = 0.2;
 
-  // TODO Add slider widget (min: 0.75, max: 1.5)
   // Set a limit for the ratio of the far clipping plane to the focal
-  // distance. This is a mechanism to limit parallex and resulting
-  // ghosting when using the looking glass display. The typical value
-  // should be around 1.2.
-  double farClippingLimit = 1.2;
+  // distance.
+  double farClippingLimit = d->MRMLLookingGlassViewNode->GetFarClippingLimit();
 
   distance += focalPlaneMovementFactor * distance * (farClippingLimit - 1.0);
 
@@ -480,12 +529,9 @@ void qMRMLLookingGlassView::pullFocalPlaneForward()
   // TODO Add slider widget (see above)
   double focalPlaneMovementFactor = 0.2;
 
-  // TODO Add slider widget (min: 0.75, max: 1.5)
   // Set a limit for the ratio of the near clipping plane to the focal
-  // distance. This is a mechanism to limit parallex and resulting
-  // ghosting when using the looking glass display. The typical value
-  // should be around 0.8.
-  double nearClippingLimit = 0.8;
+  // distance.
+  double nearClippingLimit = d->MRMLLookingGlassViewNode->GetNearClippingLimit();
 
   distance -= focalPlaneMovementFactor * distance * (1.0 - nearClippingLimit);
 

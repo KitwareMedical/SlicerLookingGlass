@@ -97,7 +97,7 @@ public:
   /// Get underlying RenderWindow
   Q_INVOKABLE vtkRenderWindowInteractor* interactor()const;
 
-  /// Initialize the virtual reality view to most closely
+  /// Initialize the looking glass view to most closely
   /// matched the camera of the reference view camera.
   Q_INVOKABLE void updateViewFromReferenceViewCamera();
 

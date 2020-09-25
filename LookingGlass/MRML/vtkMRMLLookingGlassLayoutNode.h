@@ -26,7 +26,7 @@
 
 #include "vtkSlicerLookingGlassModuleMRMLExport.h"
 
-/// \brief Node that describes the virtual reality layout of the application.
+/// \brief Node that describes the looking glass layout of the application.
 class VTK_SLICER_LOOKINGGLASS_MODULE_MRML_EXPORT vtkMRMLLookingGlassLayoutNode : public vtkMRMLAbstractLayoutNode
 {
 public:
@@ -49,7 +49,7 @@ public:
   virtual void Copy(vtkMRMLNode *node) override;
 
   /// Get node XML tag name (like Volume, Model)
-  virtual const char* GetNodeTagName() override {return "VirtualRealityLayout";}
+  virtual const char* GetNodeTagName() override {return "LookingGlassLayout";}
 
   /// Adds a layout description with integer identifier
   /// "layout". Returns false without making any modifications if the

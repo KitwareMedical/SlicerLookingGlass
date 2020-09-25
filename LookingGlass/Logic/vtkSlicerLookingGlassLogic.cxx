@@ -146,7 +146,7 @@ vtkMRMLLookingGlassViewNode* vtkSlicerLookingGlassLogic::AddLookingGlassViewNode
   vtkMRMLScene* scene = this->GetMRMLScene();
   if (!scene)
     {
-    vtkErrorMacro("AddVirtualRealityViewNode: Invalid MRML scene");
+    vtkErrorMacro("AddLookingGlassViewNode: Invalid MRML scene");
     return nullptr;
     }
 
@@ -230,7 +230,7 @@ void vtkSlicerLookingGlassLogic::SetLookingGlassConnected(bool connect)
       }
     else
       {
-      vtkErrorMacro("Failed to create virtual reality view node");
+      vtkErrorMacro("Failed to create looking glass view node");
       }
     }
   else

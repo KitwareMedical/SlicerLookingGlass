@@ -161,7 +161,7 @@ void qSlicerLookingGlassModulePrivate::addToolBar()
     }
 
   // Main window takes care of saving and restoring toolbar geometry and state.
-  // However, when state is restored the virtual reality toolbar was not created yet.
+  // However, when state is restored the looking glass toolbar was not created yet.
   // We need to restore the main window state again, now, that the Sequences toolbar is available.
   QSettings settings;
   settings.beginGroup("MainWindow");

@@ -63,7 +63,7 @@ public:
 
   /// Get reference view node.
   /// Reference view node is a regular 3D view node, which content
-  /// or view may be synchronized with the virtual reality camera view.
+  /// or view may be synchronized with the looking glass camera view.
   vtkMRMLViewNode* GetReferenceViewNode();
   /// Set reference view node.
   /// \sa GetReferenceViewNode

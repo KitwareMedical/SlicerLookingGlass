@@ -70,7 +70,7 @@ public:
   bool GetLookingGlassActive();
 
   /// Set the first visible 3D view as reference view for
-  /// virtual reality view.
+  /// looking glass view.
   /// If a reference view has been already set then the
   /// method has no effect.
   void SetDefaultReferenceView();

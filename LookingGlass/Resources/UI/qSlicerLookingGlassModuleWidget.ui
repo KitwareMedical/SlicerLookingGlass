@@ -163,7 +163,7 @@
       <item row="2" column="0" colspan="2">
        <widget class="QPushButton" name="UpdateViewFromReferenceViewCameraButton">
         <property name="text">
-         <string>Set virtual reality view to match reference view.</string>
+         <string>Set looking glass view to match reference view.</string>
         </property>
        </widget>
       </item>

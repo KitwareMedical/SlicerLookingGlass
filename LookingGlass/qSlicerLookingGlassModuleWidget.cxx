@@ -77,13 +77,13 @@ void qSlicerLookingGlassModuleWidget::setup()
   connect(d->RenderingEnabledCheckBox, SIGNAL(toggled(bool)), this, SLOT(setLookingGlassActive(bool)));
 
   // Display
-  connect(d->FocalPlanePushBackButton, SIGNAL(clicked()), this, SLOT(pushFocalPlaneBack()));
-  connect(d->FocalPlanePullForwardButton, SIGNAL(clicked()), this, SLOT(pullFocalPlaneForward()));
   connect(d->DesiredUpdateRateSlider, SIGNAL(valueChanged(double)), this, SLOT(onDesiredUpdateRateChanged(double)));
   connect(d->UpdateViewFromReferenceViewCameraButton, SIGNAL(clicked()), this, SLOT(updateViewFromReferenceViewCamera()));
 
   // Advanced
   connect(d->ReferenceViewNodeComboBox, SIGNAL(currentNodeChanged(vtkMRMLNode*)), this, SLOT(setReferenceViewNode(vtkMRMLNode*)));
+  connect(d->FocalPlanePushBackButton, SIGNAL(clicked()), this, SLOT(pushFocalPlaneBack()));
+  connect(d->FocalPlanePullForwardButton, SIGNAL(clicked()), this, SLOT(pullFocalPlaneForward()));
   connect(d->NearClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onNearClippingLimitChanged(double)));
   connect(d->FarClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onFarClippingLimitChanged(double)));
 }

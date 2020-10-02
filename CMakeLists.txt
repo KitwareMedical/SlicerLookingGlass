@@ -4,12 +4,12 @@ project(SlicerLookingGlass)
 
 #-----------------------------------------------------------------------------
 # Extension meta-information
-set(EXTENSION_HOMEPAGE "https://www.slicer.org/wiki/Documentation/Nightly/Extensions/SlicerLookingGlass")
+set(EXTENSION_HOMEPAGE "https://github.com/KitwareMedical/SlicerLookingGlass")
 set(EXTENSION_CATEGORY "Holographic Display")
-set(EXTENSION_CONTRIBUTORS "Jean-Christophe Fillion-Robin (Kitware), Ken Martin (Kitware)")
+set(EXTENSION_CONTRIBUTORS "Jean-Christophe Fillion-Robin (Kitware), Ken Martin (Kitware), Cory Quammen (Kitware), Andras Lasso (PerkLab)")
 set(EXTENSION_DESCRIPTION "Allows user to visualize the 3D scene using the Looking Glass hardware display.")
-set(EXTENSION_ICONURL "http://www.example.com/Slicer/Extensions/SlicerLookingGlass.png")
-set(EXTENSION_SCREENSHOTURLS "http://www.example.com/Slicer/Extensions/SlicerLookingGlass/Screenshots/1.png")
+set(EXTENSION_ICONURL "https://raw.githubusercontent.com/KitwareMedical/SlicerLookingGlass/master/LookingGlass/Resources/Icons/LookingGlass.png")
+set(EXTENSION_SCREENSHOTURLS "https://github.com/KitwareMedical/SlicerLookingGlass/releases/download/docs-resources/2020.09.24_SlicerLookingGlass_WhiteMatterAnalysis.png")
 set(EXTENSION_DEPENDS "NA") # Specified as a list or "NA" if no dependencies
 set(EXTENSION_BUILD_SUBDIRECTORY inner-build)
 

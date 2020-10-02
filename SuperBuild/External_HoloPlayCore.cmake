@@ -32,8 +32,8 @@ if((NOT DEFINED ${proj}_INCLUDE_DIR
 
   ExternalProject_Add(${proj}
     ${${proj}_EP_ARGS}
-    URL https://www.paraview.org/files/dependencies/HoloPlayCore-0.1.1-Open.tar.gz
-    URL_HASH SHA256=41317d0f1ed806152f60631b36704356e346a3bd20028b91ccafa7f3603ab5be
+    URL https://www.paraview.org/files/dependencies/HoloPlayCore-0.1.1-Open-20200923.tar.gz
+    URL_HASH SHA256=8626082ddc89dbbd018e6113e069eb64c9f8e540db06c4c7e85162dc38b5ddad
     DOWNLOAD_DIR ${CMAKE_BINARY_DIR}
     SOURCE_DIR ${EP_BINARY_DIR}
     BUILD_IN_SOURCE 1

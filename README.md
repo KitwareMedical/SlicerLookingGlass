@@ -2,6 +2,8 @@
 
 Extension for 3D slicer that enables user to visualize the 3D scene using the Looking Glass hardware display.
 
+![](https://github.com/KitwareMedical/SlicerLookingGlass/releases/download/docs-resources/2020.09.24_SlicerLookingGlass_WhiteMatterAnalysis.png)
+
 ## Getting Started
 
 * Obtain the holographic display hardware from https://lookingglassfactory.com

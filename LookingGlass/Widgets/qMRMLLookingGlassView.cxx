@@ -301,7 +301,14 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
   if (this->RenderWindow)
   {
     // Desired update rate
-    this->RenderWindow->SetDesiredUpdateRate(this->desiredUpdateRate());
+    if (this->MRMLLookingGlassViewNode->GetRenderingMode() == vtkMRMLLookingGlassViewNode::RenderingModeAlways)
+    {
+      this->RenderWindow->SetDesiredUpdateRate(this->desiredUpdateRate());
+    }
+    else
+    {
+      this->RenderWindow->SetDesiredUpdateRate(1);
+    }
 
     vtkMRMLCameraNode* cameraNode = this->CamerasLogic->GetViewActiveCameraNode(this->MRMLLookingGlassViewNode);
     if (!cameraNode || !cameraNode->GetCamera())

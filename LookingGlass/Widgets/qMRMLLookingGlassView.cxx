@@ -202,8 +202,8 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
       << "vtkMRMLThreeDReformatDisplayableManager"
       << "vtkMRMLCrosshairDisplayableManager3D"
       << "vtkMRMLOrientationMarkerDisplayableManager"
-      //<< "vtkMRMLRulerDisplayableManager" // Not supported in LookingGlass ?
-      //<< "vtkMRMLAnnotationDisplayableManager" // Not supported in LookingGlass ?
+      << "vtkMRMLRulerDisplayableManager"
+      << "vtkMRMLAnnotationDisplayableManager"
       << "vtkMRMLMarkupsDisplayableManager"
       << "vtkMRMLSegmentationsDisplayableManager3D"
       << "vtkMRMLTransformsDisplayableManager3D"

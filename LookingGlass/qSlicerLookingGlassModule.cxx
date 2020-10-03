@@ -257,20 +257,23 @@ qSlicerLookingGlassModule::~qSlicerLookingGlassModule()
 //-----------------------------------------------------------------------------
 QString qSlicerLookingGlassModule::helpText() const
 {
-  return "This is a loadable module that can be bundled in an extension";
+  return "This is a loadable module enabling user to visualize the 3D scene using the Looking Glass hardware display";
 }
 
 //-----------------------------------------------------------------------------
 QString qSlicerLookingGlassModule::acknowledgementText() const
 {
-  return "This work was partially funded by NIH grant NXNNXXNNNNNN-NNXN";
+  return "This work was partially funded by NIH grant 5R42NS086295-03";
 }
 
 //-----------------------------------------------------------------------------
 QStringList qSlicerLookingGlassModule::contributors() const
 {
   QStringList moduleContributors;
-  moduleContributors << QString("John Doe (AnyWare Corp.)");
+  moduleContributors << QString("Jean-Christophe Fillion-Robin (Kitware)");
+  moduleContributors << QString("Ken Martin (Kitware)");
+  moduleContributors << QString("Cory Quammen (Kitware)");
+  moduleContributors << QString("Andras Lasso (PerkLab)");
   return moduleContributors;
 }
 

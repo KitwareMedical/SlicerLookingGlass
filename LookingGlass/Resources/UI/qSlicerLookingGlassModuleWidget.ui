@@ -110,13 +110,24 @@
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0">
+       <widget class="QLabel" name="RenderingModeLabel">
+        <property name="text">
+         <string>Rendering:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="RenderingModeComboBox">
+       </widget>
+      </item>
+      <item row="1" column="0">
        <widget class="QLabel" name="UpdateRateLabel">
         <property name="text">
          <string>Update rate:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="1" column="1">
        <widget class="ctkSliderWidget" name="DesiredUpdateRateSlider">
         <property name="toolTip">
          <string>Desired update rate of the view. Higher value reduces time lag but may decrease display quality of volume rendering. It has only effect if volume rendering quality setting is Adaptive.</string>
@@ -135,7 +146,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2">
+      <item row="2" column="0" colspan="2">
        <widget class="QPushButton" name="UpdateViewFromReferenceViewCameraButton">
         <property name="text">
          <string>Set looking glass view to match reference view.</string>

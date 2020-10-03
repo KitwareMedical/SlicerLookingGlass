@@ -42,6 +42,7 @@ public slots:
   void setLookingGlassActive(bool activate);
   void setReferenceViewNode(vtkMRMLNode*);
   void updateViewFromReferenceViewCamera();
+  void onRenderingModeChanged(int);
   void onDesiredUpdateRateChanged(double);
   void setUseClippingLimits(bool);
   void onNearClippingLimitChanged(double);

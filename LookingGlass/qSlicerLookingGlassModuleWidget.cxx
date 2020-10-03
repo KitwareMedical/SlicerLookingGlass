@@ -72,11 +72,18 @@ void qSlicerLookingGlassModuleWidget::setup()
   d->setupUi(this);
   this->Superclass::setup();
 
+  // Update UI
+  for (int idx = 0; idx < vtkMRMLLookingGlassViewNode::RenderingMode_Last; idx++)
+  {
+    d->RenderingModeComboBox->addItem(vtkMRMLLookingGlassViewNode::GetRenderingModeAsString(idx));
+  }
+
   // Connection
   connect(d->ConnectCheckBox, SIGNAL(toggled(bool)), this, SLOT(setLookingGlassConnected(bool)));
   connect(d->RenderingEnabledCheckBox, SIGNAL(toggled(bool)), this, SLOT(setLookingGlassActive(bool)));
 
   // Display
+  connect(d->RenderingModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onRenderingModeChanged(int)));
   connect(d->DesiredUpdateRateSlider, SIGNAL(valueChanged(double)), this, SLOT(onDesiredUpdateRateChanged(double)));
   connect(d->UpdateViewFromReferenceViewCameraButton, SIGNAL(clicked()), this, SLOT(updateViewFromReferenceViewCamera()));
 
@@ -115,6 +122,11 @@ void qSlicerLookingGlassModuleWidget::updateWidgetFromMRML()
   wasBlocked = d->RenderingEnabledCheckBox->blockSignals(true);
   d->RenderingEnabledCheckBox->setChecked(lgViewNode != nullptr && lgViewNode->GetActive());
   d->RenderingEnabledCheckBox->blockSignals(wasBlocked);
+
+  wasBlocked = d->RenderingModeComboBox->blockSignals(true);
+  d->RenderingModeComboBox->setCurrentIndex(lgViewNode != nullptr ? lgViewNode->GetRenderingMode() : 0);
+  d->RenderingModeComboBox->blockSignals(wasBlocked);
+  d->RenderingModeComboBox->setEnabled(lgViewNode != nullptr);
 
   wasBlocked = d->DesiredUpdateRateSlider->blockSignals(true);
   d->DesiredUpdateRateSlider->setValue(lgViewNode != nullptr ? lgViewNode->GetDesiredUpdateRate() : 0);
@@ -174,6 +186,18 @@ void qSlicerLookingGlassModuleWidget::updateViewFromReferenceViewCamera()
     return;
     }
   lgView->updateViewFromReferenceViewCamera();
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::onRenderingModeChanged(int mode)
+{
+  Q_D(qSlicerLookingGlassModuleWidget);
+  vtkSlicerLookingGlassLogic* lgLogic = vtkSlicerLookingGlassLogic::SafeDownCast(this->logic());
+  vtkMRMLLookingGlassViewNode* lgViewNode = lgLogic->GetLookingGlassViewNode();
+  if (lgViewNode)
+  {
+    lgViewNode->SetRenderingMode(mode);
+  }
 }
 
 //-----------------------------------------------------------------------------

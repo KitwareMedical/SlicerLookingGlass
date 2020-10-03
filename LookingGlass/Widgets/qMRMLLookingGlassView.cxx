@@ -596,6 +596,17 @@ void qMRMLLookingGlassView::scheduleRender()
     return;
     }
 
+  if (d->MRMLLookingGlassViewNode->GetRenderingMode() == vtkMRMLLookingGlassViewNode::RenderingModeOnlyWhenRequested)
+    {
+    return;
+    }
+
+  if (d->MRMLLookingGlassViewNode->GetRenderingMode() == vtkMRMLLookingGlassViewNode::RenderingModeOnlyStillRenders
+    && this->isReferenceViewInteractive())
+    {
+    return;
+    }
+
   double msecsBeforeRender = 0;
   // If the MaximumUpdateRate is set to 0 then it indicates that rendering is done next time
   // the application is idle.

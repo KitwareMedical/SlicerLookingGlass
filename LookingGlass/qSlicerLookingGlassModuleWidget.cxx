@@ -87,6 +87,47 @@ void qSlicerLookingGlassModuleWidget::setup()
   connect(d->UseClippingLimitsCheckBox, SIGNAL(toggled(bool)), this, SLOT(setUseClippingLimits(bool)));
   connect(d->NearClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onNearClippingLimitChanged(double)));
   connect(d->FarClippingLimitSlider, SIGNAL(valueChanged(double)), this, SLOT(onFarClippingLimitChanged(double)));
+
+  this->updateWidgetFromMRML();
+
+  // If looking glass logic is modified it indicates that the view node may changed
+  qvtkConnect(this->logic(), vtkCommand::ModifiedEvent, this, SLOT(updateWidgetFromMRML()));
+}
+
+//--------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::updateWidgetFromMRML()
+{
+  Q_D(qSlicerLookingGlassModuleWidget);
+  vtkSlicerLookingGlassLogic* lgLogic = vtkSlicerLookingGlassLogic::SafeDownCast(this->logic());
+  vtkMRMLLookingGlassViewNode* lgViewNode = lgLogic->GetLookingGlassViewNode();
+
+  bool wasBlocked = d->ConnectCheckBox->blockSignals(true);
+  d->ConnectCheckBox->setChecked(lgViewNode != NULL && lgViewNode->GetVisibility());
+  d->ConnectCheckBox->blockSignals(wasBlocked);
+
+  QString errorText;
+  if (lgViewNode && lgViewNode->HasError())
+  {
+    errorText = lgViewNode->GetError().c_str();
+  }
+  d->ConnectionStatusLabel->setText(errorText);
+
+  wasBlocked = d->RenderingEnabledCheckBox->blockSignals(true);
+  d->RenderingEnabledCheckBox->setChecked(lgViewNode != nullptr && lgViewNode->GetActive());
+  d->RenderingEnabledCheckBox->blockSignals(wasBlocked);
+
+  wasBlocked = d->DesiredUpdateRateSlider->blockSignals(true);
+  d->DesiredUpdateRateSlider->setValue(lgViewNode != nullptr ? lgViewNode->GetDesiredUpdateRate() : 0);
+  d->DesiredUpdateRateSlider->setEnabled(lgViewNode != nullptr);
+  d->DesiredUpdateRateSlider->blockSignals(wasBlocked);
+
+  wasBlocked = d->ReferenceViewNodeComboBox->blockSignals(true);
+  d->ReferenceViewNodeComboBox->setCurrentNode(lgViewNode != nullptr ? lgViewNode->GetReferenceViewNode() : NULL);
+  d->ReferenceViewNodeComboBox->blockSignals(wasBlocked);
+  d->ReferenceViewNodeComboBox->setEnabled(lgViewNode != nullptr);
+
+  d->UpdateViewFromReferenceViewCameraButton->setEnabled(lgViewNode != nullptr
+    && lgViewNode->GetReferenceViewNode() != nullptr);
 }
 
 //-----------------------------------------------------------------------------

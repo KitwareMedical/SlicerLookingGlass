@@ -49,6 +49,9 @@ public slots:
   void pullFocalPlaneForward();
   void pushFocalPlaneBack();
 
+protected slots:
+  void updateWidgetFromMRML();
+
 protected:
   QScopedPointer<qSlicerLookingGlassModuleWidgetPrivate> d_ptr;
 

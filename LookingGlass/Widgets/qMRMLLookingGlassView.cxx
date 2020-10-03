@@ -242,13 +242,13 @@ void qMRMLLookingGlassViewPrivate::destroyRenderWindow()
   // Must break the connection between interactor and render window,
   // otherwise they would circularly refer to each other and would not
   // be deleted.
-//  this->Interactor->SetRenderWindow(nullptr);
-//  this->Interactor = nullptr;
-//  this->InteractorStyle = nullptr;
-//  this->DisplayableManagerGroup = nullptr;
-//  this->Renderer = nullptr;
-//  this->Camera = nullptr;
-//  this->RenderWindow = nullptr;
+  this->Interactor->SetRenderWindow(nullptr);
+  this->Interactor = nullptr;
+  this->InteractorStyle = nullptr;
+  this->DisplayableManagerGroup = nullptr;
+  this->Renderer = nullptr;
+  this->Camera = nullptr;
+  this->RenderWindow = nullptr;
 }
 
 // --------------------------------------------------------------------------
@@ -526,10 +526,6 @@ bool qMRMLLookingGlassView::isHardwareConnected()const
   {
     return false;
   }
-//  if (!renWin->GetHMD())
-//  {
-//    return false;
-//  }
   // connected successfully
   return true;
 }

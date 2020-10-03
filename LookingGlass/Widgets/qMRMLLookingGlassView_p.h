@@ -111,7 +111,7 @@ protected:
   QTimer*                                       RequestTimer;
   QTime                                         RequestTime;
 
-//  QTimer LookingGlassLoopTimer;
+  QTimer LookingGlassLoopTimer;
 };
 
 #endif

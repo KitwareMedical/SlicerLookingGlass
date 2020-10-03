@@ -109,6 +109,9 @@ void qMRMLLookingGlassViewPrivate::init()
 {
   Q_Q(qMRMLLookingGlassView);
 
+  QObject::connect(&this->LookingGlassLoopTimer, SIGNAL(timeout()),
+    q, SLOT(scheduleRender()));
+
   this->RequestTimer = new QTimer(q);
   this->RequestTimer->setSingleShot(true);
   QObject::connect(this->RequestTimer, SIGNAL(timeout()),
@@ -239,7 +242,7 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
 void qMRMLLookingGlassViewPrivate::destroyRenderWindow()
 {
   Q_Q(qMRMLLookingGlassView);
-//  this->LookingGlassLoopTimer.stop();
+  this->LookingGlassLoopTimer.stop();
   // Must break the connection between interactor and render window,
   // otherwise they would circularly refer to each other and would not
   // be deleted.
@@ -331,14 +334,14 @@ void qMRMLLookingGlassViewPrivate::updateWidgetFromMRML()
       }
   }
 
-//  if (this->MRMLLookingGlassViewNode->GetActive())
-//  {
-//    this->LookingGlassLoopTimer.start(0);
-//  }
-//  else
-//  {
-//    this->LookingGlassLoopTimer.stop();
-//  }
+  if (this->MRMLLookingGlassViewNode->GetActive())
+    {
+    this->LookingGlassLoopTimer.start(0);
+    }
+  else
+    {
+    this->LookingGlassLoopTimer.stop();
+    }
 }
 
 //---------------------------------------------------------------------------

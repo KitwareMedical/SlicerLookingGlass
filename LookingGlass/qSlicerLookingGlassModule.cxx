@@ -370,6 +370,8 @@ void qSlicerLookingGlassModule::enableLookingGlass(bool enable)
   Q_D(qSlicerLookingGlassModule);
   QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
   d->logic()->SetLookingGlassActive(enable);
+  // Ensure required connections are setup (e.g observation of Start/EndInteractionEvent)
+  this->widgetRepresentation();
   QApplication::restoreOverrideCursor();
 }
 

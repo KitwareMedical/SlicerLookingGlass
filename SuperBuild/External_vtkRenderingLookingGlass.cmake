@@ -44,7 +44,7 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
 
   ExternalProject_SetIfNotDefined(
     ${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_TAG
-    "cd70e5c0ff46b6fb52b32ba675611ab057c60d1f" # support-building-as-external-module + limit-clipping-range-to-limit-parallax
+    "6bdedeadf70fbbba2b68c6063df3306b5bfd2244" # support-building-as-external-module
     QUIET
     )
 

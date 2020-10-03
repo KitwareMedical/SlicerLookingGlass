@@ -607,6 +607,8 @@ void qMRMLLookingGlassView::scheduleRender()
     return;
     }
 
+  this->updateViewFromReferenceViewCamera();
+
   double msecsBeforeRender = 0;
   // If the MaximumUpdateRate is set to 0 then it indicates that rendering is done next time
   // the application is idle.

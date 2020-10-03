@@ -72,6 +72,27 @@ public:
   /// \sa GetReferenceViewNode
   bool SetAndObserveReferenceViewNode(vtkMRMLViewNode* node);
 
+  /// Rendering mode options
+  /// OnlyWhenRequested
+  /// OnlyStillRenders
+  /// Always
+  enum
+  {
+    RenderingModeOnlyWhenRequested = 0,
+    RenderingModeOnlyStillRenders = 1,
+    RenderingModeAlways = 2,
+    RenderingMode_Last
+  };
+
+  /// Get/Set flag that controls rendering mode
+  vtkSetClampMacro(RenderingMode, int, 0, vtkMRMLLookingGlassViewNode::RenderingMode_Last - 1);
+  vtkGetMacro(RenderingMode, int);
+  std::string GetRenderingModeAsString();
+
+  /// Convert between rendering mode ID and name
+  static const char* GetRenderingModeAsString(int id);
+  static int GetRenderingModeFromString(const char* name);
+
   /// Desired frame rate. Volume renderer may use this information
   /// for determining sampling distances (and other LOD actors, to
   /// determine display quality).
@@ -113,6 +134,7 @@ public:
   std::string GetError() const;
 
 protected:
+  int RenderingMode;
   double DesiredUpdateRate;
   bool UseClippingLimits;
   double NearClippingLimit;

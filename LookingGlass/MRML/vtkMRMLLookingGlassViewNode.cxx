@@ -30,7 +30,8 @@ vtkMRMLNodeNewMacro(vtkMRMLLookingGlassViewNode);
 
 //----------------------------------------------------------------------------
 vtkMRMLLookingGlassViewNode::vtkMRMLLookingGlassViewNode()
-  : DesiredUpdateRate(60.0)
+  : RenderingMode(vtkMRMLLookingGlassViewNode::RenderingModeOnlyStillRenders)
+  , DesiredUpdateRate(60.0)
   , UseClippingLimits(false)
   , NearClippingLimit(0.8)
   , FarClippingLimit(1.2)
@@ -62,6 +63,7 @@ void vtkMRMLLookingGlassViewNode::WriteXML(ostream& of, int nIndent)
   this->Superclass::WriteXML(of, nIndent);
 
   vtkMRMLWriteXMLBeginMacro(of);
+  vtkMRMLWriteXMLEnumMacro(renderingMode, RenderingMode);
   vtkMRMLWriteXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
   vtkMRMLWriteXMLBooleanMacro(useClippingLimits, UseClippingLimits);
   vtkMRMLWriteXMLFloatMacro(nearClippingLimit, NearClippingLimit);
@@ -77,6 +79,7 @@ void vtkMRMLLookingGlassViewNode::ReadXMLAttributes(const char** atts)
   this->Superclass::ReadXMLAttributes(atts);
 
   vtkMRMLReadXMLBeginMacro(atts);
+  vtkMRMLReadXMLEnumMacro(renderingMode, RenderingMode);
   vtkMRMLReadXMLFloatMacro(desiredUpdateRate, DesiredUpdateRate);
   vtkMRMLReadXMLBooleanMacro(useClippingLimits, UseClippingLimits);
   vtkMRMLReadXMLFloatMacro(nearClippingLimit, NearClippingLimit);
@@ -96,6 +99,7 @@ void vtkMRMLLookingGlassViewNode::Copy(vtkMRMLNode* anode)
   this->Superclass::Copy(anode);
 
   vtkMRMLCopyBeginMacro(anode);
+  vtkMRMLCopyEnumMacro(RenderingMode);
   vtkMRMLCopyFloatMacro(DesiredUpdateRate);
   vtkMRMLCopyBooleanMacro(UseClippingLimits);
   vtkMRMLCopyFloatMacro(NearClippingLimit);
@@ -111,6 +115,7 @@ void vtkMRMLLookingGlassViewNode::PrintSelf(ostream& os, vtkIndent indent)
   this->Superclass::PrintSelf(os, indent);
 
   vtkMRMLPrintBeginMacro(os, indent);
+  vtkMRMLPrintEnumMacro(RenderingMode);
   vtkMRMLPrintFloatMacro(DesiredUpdateRate);
   vtkMRMLPrintBooleanMacro(UseClippingLimits);
   vtkMRMLPrintFloatMacro(NearClippingLimit);
@@ -178,6 +183,46 @@ bool vtkMRMLLookingGlassViewNode::SetAndObserveReferenceViewNode(vtkMRMLViewNode
   }
   this->SetAndObserveReferenceViewNodeID(node->GetID());
   return true;
+}
+
+//----------------------------------------------------------------------------
+std::string vtkMRMLLookingGlassViewNode::GetRenderingModeAsString()
+{
+  return vtkMRMLLookingGlassViewNode::GetRenderingModeAsString(this->RenderingMode);
+}
+
+//-----------------------------------------------------------
+const char* vtkMRMLLookingGlassViewNode::GetRenderingModeAsString(int id)
+{
+  switch (id)
+  {
+  case RenderingModeOnlyWhenRequested: return "OnlyWhenRequested";
+  case RenderingModeOnlyStillRenders: return "OnlyStillRenders";
+  case RenderingModeAlways: return "Always";
+  default:
+    // invalid id
+    return "";
+  }
+}
+
+//-----------------------------------------------------------
+int vtkMRMLLookingGlassViewNode::GetRenderingModeFromString(const char* name)
+{
+  if (name == nullptr)
+  {
+    // invalid name
+    return -1;
+  }
+  for (int ii = 0; ii < RenderingMode_Last; ii++)
+  {
+    if (strcmp(name, GetRenderingModeAsString(ii)) == 0)
+    {
+      // found a matching name
+      return ii;
+    }
+  }
+  // unknown name
+  return -1;
 }
 
 //----------------------------------------------------------------------------

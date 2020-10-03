@@ -23,6 +23,9 @@
 
 #include "qSlicerLookingGlassModuleExport.h"
 
+// CTK includes
+#include <ctkVTKObject.h>
+
 class qSlicerLookingGlassModuleWidgetPrivate;
 class vtkMRMLNode;
 
@@ -30,6 +33,7 @@ class Q_SLICER_QTMODULES_LOOKINGGLASS_EXPORT qSlicerLookingGlassModuleWidget :
   public qSlicerAbstractModuleWidget
 {
   Q_OBJECT
+  QVTK_OBJECT
 
 public:
 
@@ -52,6 +56,8 @@ public slots:
 
 protected slots:
   void updateWidgetFromMRML();
+  void onInteractorStyleStartInteractionEvent();
+  void onInteractorStyleEndInteractionEvent();
 
 protected:
   QScopedPointer<qSlicerLookingGlassModuleWidgetPrivate> d_ptr;

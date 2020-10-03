@@ -93,6 +93,7 @@
 qMRMLLookingGlassViewPrivate::qMRMLLookingGlassViewPrivate(qMRMLLookingGlassView& object)
   : q_ptr(&object)
   , CamerasLogic(nullptr)
+  , ReferenceViewInteractive(false)
   , RequestTimer(nullptr)
 {
   this->MRMLLookingGlassViewNode = nullptr;
@@ -528,6 +529,20 @@ bool qMRMLLookingGlassView::isHardwareConnected()const
   }
   // connected successfully
   return true;
+}
+
+//---------------------------------------------------------------------------
+bool qMRMLLookingGlassView::isReferenceViewInteractive() const
+{
+  Q_D(const qMRMLLookingGlassView);
+  return d->ReferenceViewInteractive;
+}
+
+//---------------------------------------------------------------------------
+void qMRMLLookingGlassView::setReferenceViewInteractive(bool interactive)
+{
+  Q_D(qMRMLLookingGlassView);
+  d->ReferenceViewInteractive = interactive;
 }
 
 //---------------------------------------------------------------------------

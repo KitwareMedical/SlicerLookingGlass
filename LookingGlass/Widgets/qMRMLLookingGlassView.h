@@ -57,6 +57,7 @@ class Q_SLICER_MODULE_LOOKINGGLASS_WIDGETS_EXPORT qMRMLLookingGlassView : public
 {
   Q_OBJECT
   QVTK_OBJECT
+  Q_PROPERTY(bool referenceViewInteractive READ isReferenceViewInteractive WRITE setReferenceViewInteractive)
 public:
   /// Superclass typedef
   typedef QWidget Superclass;
@@ -103,6 +104,15 @@ public:
 
   /// Get underlying RenderWindow
   Q_INVOKABLE bool isHardwareConnected()const;
+
+  /// Indicate if reference view is being interacted with
+  bool isReferenceViewInteractive() const;
+
+  /// Set interaction state associated with the reference view.
+  ///
+  /// \warning This should only be set from qSlicerLookingGlassModuleWidget based
+  /// on vtkCommand::StartInteractionEvent and vtkCommand::EndInteractionEvent
+  void setReferenceViewInteractive(bool interactive);
 
 public slots:
   /// Set the current \a viewNode to observe

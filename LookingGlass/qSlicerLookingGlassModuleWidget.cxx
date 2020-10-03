@@ -19,6 +19,15 @@
 #include <QDebug>
 
 // Slicer includes
+#include <qSlicerApplication.h>
+#include <qSlicerLayoutManager.h>
+#include <qMRMLThreeDWidget.h>
+#include <qMRMLThreeDView.h>
+
+// VTK includes
+#include <vtkInteractorStyle.h>
+
+// LookingGlass includes
 #include "qSlicerLookingGlassModuleWidget.h"
 #include "ui_qSlicerLookingGlassModuleWidget.h"
 
@@ -143,6 +152,39 @@ void qSlicerLookingGlassModuleWidget::updateWidgetFromMRML()
 }
 
 //-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::onInteractorStyleStartInteractionEvent()
+{
+  Q_D(qSlicerLookingGlassModuleWidget);
+  qSlicerLookingGlassModule* lgModule = dynamic_cast<qSlicerLookingGlassModule*>(this->module());
+  if (!lgModule)
+    {
+    return;
+    }
+  qMRMLLookingGlassView* lgView = lgModule->viewWidget();
+  if (!lgView)
+    {
+    return;
+    }
+  lgView->setReferenceViewInteractive(true);
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerLookingGlassModuleWidget::onInteractorStyleEndInteractionEvent()
+{
+  qSlicerLookingGlassModule* lgModule = dynamic_cast<qSlicerLookingGlassModule*>(this->module());
+  if (!lgModule)
+    {
+    return;
+    }
+  qMRMLLookingGlassView* lgView = lgModule->viewWidget();
+  if (!lgView)
+    {
+    return;
+    }
+  lgView->setReferenceViewInteractive(false);
+}
+
+//-----------------------------------------------------------------------------
 void qSlicerLookingGlassModuleWidget::setLookingGlassConnected(bool connect)
 {
   Q_D(qSlicerLookingGlassModuleWidget);
@@ -164,11 +206,25 @@ void qSlicerLookingGlassModuleWidget::setReferenceViewNode(vtkMRMLNode* node)
   Q_D(qSlicerLookingGlassModuleWidget);
   vtkSlicerLookingGlassLogic* lgLogic = vtkSlicerLookingGlassLogic::SafeDownCast(this->logic());
   vtkMRMLLookingGlassViewNode* lgViewNode = lgLogic->GetLookingGlassViewNode();
-  if (lgViewNode)
+  if (!lgViewNode)
     {
-    vtkMRMLViewNode* referenceViewNode = vtkMRMLViewNode::SafeDownCast(node);
-    lgViewNode->SetAndObserveReferenceViewNode(referenceViewNode);
+    return;
     }
+  vtkMRMLViewNode* referenceViewNode = vtkMRMLViewNode::SafeDownCast(node);
+  lgViewNode->SetAndObserveReferenceViewNode(referenceViewNode);
+
+  // Get reference to interactor style
+  qSlicerLayoutManager* layoutManager = qSlicerApplication::application()->layoutManager();
+  if (!layoutManager)
+    {
+    qWarning() << Q_FUNC_INFO << " failed: layout manager is not available";
+    return;
+    }
+  qMRMLThreeDWidget* threeDWidget = qobject_cast<qMRMLThreeDWidget*>(layoutManager->viewWidget(referenceViewNode));
+  qMRMLThreeDView* threeDView = threeDWidget->threeDView();
+  vtkInteractorStyle* interactor = vtkInteractorStyle::SafeDownCast(threeDView->interactorStyle());
+  qvtkReconnect(interactor, vtkCommand::StartInteractionEvent, this, SLOT(onInteractorStyleStartInteractionEvent()));
+  qvtkReconnect(interactor, vtkCommand::EndInteractionEvent, this, SLOT(onInteractorStyleEndInteractionEvent()));
 }
 
 //-----------------------------------------------------------------------------

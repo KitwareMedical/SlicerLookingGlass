@@ -105,6 +105,8 @@ protected:
   double LastViewUp[3];
   double LastViewPosition[3];
 
+  bool ReferenceViewInteractive;
+
   // Copied from ctkVTKAbstractViewPrivate
   QTimer*                                       RequestTimer;
   QTime                                         RequestTime;

@@ -36,6 +36,13 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
       )
   endif()
 
+  if(APPLE)
+    list(APPEND EXTERNAL_PROJECT_OPTIONAL_CMAKE_CACHE_ARGS
+      # Workaround https://gitlab.kitware.com/vtk/vtk/-/issues/18032
+      -DVTK_USE_COCOA:BOOL=ON
+      )
+  endif()
+
   ExternalProject_SetIfNotDefined(
     ${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_REPOSITORY
     "${EP_GIT_PROTOCOL}://github.com/jcfr/LookingGlassVTKModule.git"

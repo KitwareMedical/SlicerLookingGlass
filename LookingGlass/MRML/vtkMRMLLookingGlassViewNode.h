@@ -55,7 +55,7 @@ public:
   virtual const char* GetNodeTagName() override;
 
   /// Update the references of the node to the scene.
-  virtual void SetSceneReferences();
+  virtual void SetSceneReferences() override;
 
   /// Return the color the view nodes have for the background by default.
   static double* defaultBackgroundColor();

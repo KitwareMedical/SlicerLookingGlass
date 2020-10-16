@@ -45,7 +45,7 @@ public:
 
   static vtkSlicerLookingGlassLogic *New();
   vtkTypeMacro(vtkSlicerLookingGlassLogic, vtkSlicerModuleLogic);
-  void PrintSelf(ostream& os, vtkIndent indent);
+  void PrintSelf(ostream& os, vtkIndent indent) override;
 
   /// Creates a singleton looking glass view node and adds it to the scene.
   /// If there is a looking glass view node in the scene already then it just returns that.

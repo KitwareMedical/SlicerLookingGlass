@@ -46,6 +46,11 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
       # Workaround https://gitlab.kitware.com/vtk/vtk/-/issues/18032
       -DVTK_USE_COCOA:BOOL=ON
       )
+  elseif(UNIX)
+    list(APPEND EXTERNAL_PROJECT_OPTIONAL_CMAKE_CACHE_ARGS
+      # Workaround https://gitlab.kitware.com/vtk/vtk/-/issues/18032
+      -DVTK_USE_X:BOOL=ON
+      )
   endif()
 
   ExternalProject_SetIfNotDefined(

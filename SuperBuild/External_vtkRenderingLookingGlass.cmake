@@ -5,6 +5,11 @@ set(proj vtkRenderingLookingGlass)
 set(${proj}_DEPENDS
   HoloPlayCore
   )
+if(DEFINED Slicer_SOURCE_DIR)
+  list(APPEND ${proj}_DEPENDS
+    VTK
+    )
+endif()
 
 # Include dependent projects if any
 ExternalProject_Include_Dependencies(${proj} PROJECT_VAR proj)

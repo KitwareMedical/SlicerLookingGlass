@@ -61,7 +61,7 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
 
   ExternalProject_SetIfNotDefined(
     ${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_TAG
-    "6bdedeadf70fbbba2b68c6063df3306b5bfd2244" # support-building-as-external-module
+    "ba14b50d6cf689b4fdb95b575604018231baa6cb" # slicer-20201002-f3b4c89
     QUIET
     )
 

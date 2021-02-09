@@ -100,6 +100,16 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
   #-----------------------------------------------------------------------------
   # Launcher setting specific to build tree
 
+  # library paths
+  set(${proj}_LIBRARY_PATHS_LAUNCHER_BUILD
+    ${CMAKE_BINARY_DIR}/${Slicer_THIRDPARTY_BIN_DIR}
+    ${CMAKE_BINARY_DIR}/${Slicer_THIRDPARTY_BIN_DIR}/<CMAKE_CFG_INTDIR>
+    )
+  mark_as_superbuild(
+    VARS ${proj}_LIBRARY_PATHS_LAUNCHER_BUILD
+    LABELS "LIBRARY_PATHS_LAUNCHER_BUILD"
+    )
+
   # pythonpath
   set(${proj}_PYTHONPATH_LAUNCHER_BUILD
     ${${proj}_DIR}/${Slicer_INSTALL_THIRDPARTY_LIB_DIR}/${PYTHON_SITE_PACKAGES_SUBDIR}/vtkmodules

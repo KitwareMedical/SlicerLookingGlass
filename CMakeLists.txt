@@ -45,7 +45,7 @@ add_subdirectory(LookingGlass)
 ## NEXT_MODULE
 #-----------------------------------------------------------------------------
 # Install HoloPlayCore
-if(NOT APPLE AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_HoloPlayCore)
+if(NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_HoloPlayCore)
   if(WIN32)
     get_filename_component(_export_library_dir "${HoloPlayCore_LIBRARY}" PATH)
     get_filename_component(_library_without_extension ${HoloPlayCore_LIBRARY} NAME_WE)

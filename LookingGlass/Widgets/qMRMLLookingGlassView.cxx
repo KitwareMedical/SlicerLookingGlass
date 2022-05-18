@@ -194,6 +194,14 @@ void qMRMLLookingGlassViewPrivate::createRenderWindow()
   vtkMRMLLookingGlassViewDisplayableManagerFactory* factory
     = vtkMRMLLookingGlassViewDisplayableManagerFactory::GetInstance();
 
+  vtkSlicerApplicationLogic* appLogic = qSlicerApplication::application()->applicationLogic();
+  if (!appLogic)
+  {
+    qCritical() << Q_FUNC_INFO << ": Failed to access application logic";
+    return;
+  }
+  factory->SetMRMLApplicationLogic(appLogic);
+
   QStringList displayableManagers;
   displayableManagers
       << "vtkMRMLCameraDisplayableManager"

@@ -55,13 +55,13 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
 
   ExternalProject_SetIfNotDefined(
     ${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_REPOSITORY
-    "${EP_GIT_PROTOCOL}://github.com/jcfr/LookingGlassVTKModule.git"
+    "${EP_GIT_PROTOCOL}://github.com/Sunderlandkyl/LookingGlassVTKModule.git"
     QUIET
     )
 
   ExternalProject_SetIfNotDefined(
     ${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_TAG
-    "ba14b50d6cf689b4fdb95b575604018231baa6cb" # slicer-20201002-f3b4c89
+    "2340014dcf74291d9a189860f7a400577a4ade47" # slicer-20220823-5da190d
     QUIET
     )
 

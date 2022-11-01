@@ -18,6 +18,17 @@ if(NOT EXISTS "${vtkRenderingLookingGlass_SOURCE_DIR}")
   message(FATAL_ERROR "vtkRenderingLookingGlass_SOURCE_DIR [${vtkRenderingLookingGlass_SOURCE_DIR}] variable is corresponds to nonexistent directory")
 endif()
 
+# Download HoloPlayCore and set variables HoloPlayCore_INCLUDE_DIR, HoloPlayCore_LIBRARY
+# and HoloPlayCore_RUNTIME_LIBRARY.
+include(${vtkRenderingLookingGlass_SOURCE_DIR}/FetchHoloPlayCore.cmake)
+
+mark_as_superbuild(
+  VARS
+    HoloPlayCore_INCLUDE_DIR:PATH
+    HoloPlayCore_LIBRARY:FILEPATH
+    HoloPlayCore_RUNTIME_LIBRARY:FILEPATH
+  )
+
 if(NOT DEFINED Slicer_SOURCE_DIR)
   # Extension is built standalone
 

@@ -3,7 +3,6 @@ set(proj vtkRenderingLookingGlass)
 
 # Set dependency list
 set(${proj}_DEPENDS
-  HoloPlayCore
   )
 
 # Include dependent projects if any
@@ -51,6 +50,9 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
   set(expected_existing_vars
     VTKExternalModule_SOURCE_DIR
     ${proj}_SOURCE_DIR
+    HoloPlayCore_INCLUDE_DIR
+    HoloPlayCore_LIBRARY
+    HoloPlayCore_RUNTIME_LIBRARY
     )
   foreach(var ${expected_existing_vars})
     if(NOT EXISTS "${${var}}")
@@ -98,11 +100,15 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
 
   set(${proj}_DIR ${EP_BINARY_DIR})
 
+  get_filename_component(HoloPlayCore_RUNTIME_DIR ${HoloPlayCore_RUNTIME_LIBRARY} DIRECTORY)
+  ExternalProject_Message(${proj} "HoloPlayCore_RUNTIME_DIR:${HoloPlayCore_RUNTIME_DIR}")
+
   #-----------------------------------------------------------------------------
   # Launcher setting specific to build tree
 
   # library paths
   set(${proj}_LIBRARY_PATHS_LAUNCHER_BUILD
+    ${HoloPlayCore_RUNTIME_DIR}
     ${CMAKE_BINARY_DIR}/${Slicer_THIRDPARTY_BIN_DIR}
     ${CMAKE_BINARY_DIR}/${Slicer_THIRDPARTY_BIN_DIR}/<CMAKE_CFG_INTDIR>
     )

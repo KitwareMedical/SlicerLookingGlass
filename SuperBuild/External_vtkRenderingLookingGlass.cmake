@@ -5,11 +5,6 @@ set(proj vtkRenderingLookingGlass)
 set(${proj}_DEPENDS
   HoloPlayCore
   )
-if(DEFINED Slicer_SOURCE_DIR)
-  list(APPEND ${proj}_DEPENDS
-    VTK
-    )
-endif()
 
 # Include dependent projects if any
 ExternalProject_Include_Dependencies(${proj} PROJECT_VAR proj)
@@ -53,29 +48,34 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
       )
   endif()
 
-  ExternalProject_SetIfNotDefined(
-    ${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_REPOSITORY
-    "https://github.com/KitwareMedical/LookingGlassVTKModule.git"
-    QUIET
+  set(expected_existing_vars
+    VTKExternalModule_SOURCE_DIR
+    ${proj}_SOURCE_DIR
     )
+  foreach(var ${expected_existing_vars})
+    if(NOT EXISTS "${${var}}")
+      message(FATAL_ERROR "error: Variable ${var} set to ${${var}} corresponds to an nonexistent file or directory.")
+    endif()
+  endforeach()
 
-  ExternalProject_SetIfNotDefined(
-    ${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_TAG
-    "ba14b50d6cf689b4fdb95b575604018231baa6cb" # slicer-20201002-f3b4c89
-    QUIET
-    )
+  set(_module_name RenderingLookingGlass)
 
-  set(EP_SOURCE_DIR ${CMAKE_BINARY_DIR}/${proj})
+  set(EP_SOURCE_DIR ${${proj}_SOURCE_DIR})
   set(EP_BINARY_DIR ${CMAKE_BINARY_DIR}/${proj}-build)
 
   ExternalProject_Add(${proj}
     ${${proj}_EP_ARGS}
-    GIT_REPOSITORY "${${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_REPOSITORY}"
-    GIT_TAG "${${SUPERBUILD_TOPLEVEL_PROJECT}_${proj}_GIT_TAG}"
-    SOURCE_DIR ${EP_SOURCE_DIR}
+    DOWNLOAD_COMMAND ""
+    SOURCE_DIR ${VTKExternalModule_SOURCE_DIR}
     BINARY_DIR ${EP_BINARY_DIR}
     INSTALL_COMMAND ""
     CMAKE_CACHE_ARGS
+      # VTKExternalModule
+      -DVTK_MODULE_NAME:STRING=${_module_name}
+      -DVTK_MODULE_SOURCE_DIR:PATH=${EP_SOURCE_DIR}
+      -DVTK_MODULE_CMAKE_MODULE_PATH:PATH=${EP_SOURCE_DIR}  # FindHoloPlayCore.cmake available at the top-level
+      -DHoloPlayCore_FIND_PACKAGE_VARS:STRING=HoloPlayCore_INCLUDE_DIR;HoloPlayCore_LIBRARY
+      # vtkRenderingLookingGlass
       -DCMAKE_CXX_COMPILER:FILEPATH=${CMAKE_CXX_COMPILER}
       -DCMAKE_CXX_FLAGS:STRING=${ep_common_cxx_flags}
       -DCMAKE_C_COMPILER:FILEPATH=${CMAKE_C_COMPILER}
@@ -83,8 +83,9 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${SUPERBUILD_TOPLEVEL_PROJECT}_USE_SYSTEM_${p
       -DBUILD_TESTING:BOOL=OFF
       -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/${Slicer_THIRDPARTY_BIN_DIR}
       -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:PATH=${CMAKE_BINARY_DIR}/${Slicer_THIRDPARTY_LIB_DIR}
+      -DVTK_INSTALL_RUNTIME_DIR:STRING=${Slicer_INSTALL_THIRDPARTY_LIB_DIR}
+      -DVTK_INSTALL_LIBRARY_DIR:STRING=${Slicer_INSTALL_THIRDPARTY_LIB_DIR}
       -DCMAKE_INSTALL_LIBDIR:PATH=${Slicer_INSTALL_THIRDPARTY_LIB_DIR}/lib
-      -DBUILD_SHARED_LIBS:BOOL=${Slicer_BUILD_SHARED}
       -DCMAKE_MACOSX_RPATH:BOOL=0
       # Required to find VTK
       -DVTK_DIR:PATH=${VTK_DIR}
